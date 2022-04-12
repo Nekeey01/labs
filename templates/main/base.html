@@ -1,0 +1,104 @@
+
+{% load static %}
+{% load has_group %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    {% block cssfiles %}
+    {% endblock %}
+    <link type="text/css" href="{% static 'css/singin.css' %}" rel="stylesheet"/>
+    <link type="text/css" href="{% static 'css/header.css' %}" rel="stylesheet"/>
+
+</head>
+<body>
+
+<header class="p-3 bg-dark text-white">
+    <div class="container" style="max-width: 1320px;">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                {% for m in menu %}
+                    {% if m.url_name == 'home' %}
+                        {% if m.path == request.path %}
+                            <div class="btn btn-outline-primary">{{ m.title }}</div>
+                        {% else %}
+                            <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
+                        {% endif %}
+
+                    {% elif request.user|has_group:"Teacher" and m.url_name == 'show_pc' %}
+                        {% if m.path == request.path  %}
+                            <div class="btn btn-outline-primary">{{ m.title }}</div>
+                        {% else %}
+                            <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
+                        {% endif %}
+
+                    {% elif request.user|has_group:"Admin" and m.url_name == 'create_cab' or request.user|has_group:"Admin" and m.url_name == 'create_time_interval' or request.user|has_group:"Admin" and m.url_name == 'load_teacher' or request.user|has_group:"Admin" and m.url_name == 'create_equipment' or request.user|has_group:"Admin" and m.url_name == 'create_teacher' %}
+                        {% if m.path == request.path  %}
+                            <div class="btn btn-outline-primary">{{ m.title }}</div>
+                        {% else %}
+                            <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
+                        {% endif %}
+                    {% endif %}
+
+                {% endfor %}
+
+
+            </ul>
+
+            <div class="text-end">
+
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-outline-primary" href="{% url 'profile' request.user.pk %}">Привет {{ user.username }}</a>
+                    <a class="btn btn-outline-light me-2" href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    <a id="login_modal" class="btn btn-outline-light me-2" type="button" name="button">Логин</a>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+
+{% include "main/_modal.html" %}
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+{% block content %}{% endblock %}
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#login_modal").modalForm({
+            formURL: "{% url 'login' %}"
+        });
+
+        $("#register_modal").modalForm({
+            formURL: "{% url 'register' %}"
+        });
+
+    });
+</script>
+
+{% block scripts %}{% endblock %}
+
+
+</body>
+</html>

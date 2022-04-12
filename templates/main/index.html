@@ -1,0 +1,134 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block cssfiles %}
+    <link type="text/css" href="{% static 'css/index.css' %}" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Google+Sans:400,500,700|Google+Sans+Text:400">
+    <link type="text/css" rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Google+Sans+Text:400&amp;text=%E2%86%90%E2%86%92%E2%86%91%E2%86%93">
+    <style>
+        .card {
+            padding: 30px 40px;
+
+            margin-bottom: 60px;
+            background: linear-gradient(150deg, #3c2b8c, #3b175e);
+            border: none !important;
+            border-radius: 20px;
+            box-shadow: 0 1px 50px 0 rgba(126, 123, 24, 0.34);
+            font-family: "Gotham Pro";
+            line-height: 28px;
+            color: white;
+            font-weight: 400;
+            padding-top: 20px;
+            max-width: 638px;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="s-about">
+        <div class="container">
+            <div class="s-about-line row">
+                <div class="s-about-block col-xl-6 col-lg-6 ">
+                    <ul class="s-about-list">
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    Быстрый и многофункциональный поиск
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    Возможность заказывать лаборатории в два клика
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    Круглосуточная работа сайта
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="s-about-block col-xl-6 col-lg-6">
+                    <ul class="s-about-list">
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    Приятный интерфейс
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    Лабораторий в вашем распоряжении - {{ count_lab }}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="s-about-item">
+                                <div class="s-about-left"></div>
+                                <div class="s-about-icon"></div>
+                                <div class="s-about-right">
+                                    На данный момент резерваций - {{ res_lab }}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="s-find">
+        <div class="container">
+            <div class="s-line"></div>
+            <div class="s-find-inner">
+                <h2 class="s-find-title">Наше ПО:</h2>
+
+                <div class="s-find-line row">
+
+                    {% for t in po %}
+                    <div class="card-columns col-md-4">
+                        <div class="card bg-dark  mx-sm-1 p-3 text-center" style="border-radius: 7px">
+                            <div class="card-body bg-transparent">
+                                <h3 class="card-title text-white">{{ t.title }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="s-line"></div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+

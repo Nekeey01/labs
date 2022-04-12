@@ -1,0 +1,170 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block cssfiles %}
+    <style>
+        body {
+            color: #c8c8c8e8;
+            overflow-x: hidden;
+            height: 100%;
+            background: -webkit-linear-gradient(90deg, #241111, #381555);
+            background: linear-gradient(90deg, #241111, #381555);
+            background-size: 100% 100%
+        }
+
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            background: linear-gradient(150deg, #3a1446, #431a62);
+            border: none !important;
+            border-radius: 20px;
+            box-shadow: 0 1px 50px 0 rgba(126, 123, 24, 0.34);
+        {#box-shadow: 58px 58px 18px 0px rgba(126, 123, 24, 0.47);#}
+        }
+
+        .blue-text {
+            color: #00BCD4
+        }
+
+        .form-control-label {
+            margin-bottom: 0
+        }
+
+
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400
+        }
+
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer
+        }
+
+        .btn-block:hover {
+            color: #fff !important
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0
+        }
+
+        ul {
+            list-style-type: none;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-7">
+                <div class="card">
+
+                    <h3 class="text-center mb-4">{{ title }}</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-error">{{ form.non_field_errors }}</div>
+
+
+                        <div class="row justify-content-center mt-4">
+                            <div class="col">
+                                <label name="{{ f.name }}" class="form-control-label"
+                                       for="{{ f.id_for_label }}">{{ form.number.label }}<span
+                                        class="text-danger"> *</span></label>
+                                {{ form.number }}
+                                <div class="form-error">{{ f.errors }}</div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-mt-3 col-auto">
+                                <label name="{{ f.name }}" class="form-control-label"
+                                       for="{{ f.id_for_label }}">{{ form.time_id.label }}<span
+                                        class="text-danger"> *</span></label>
+                                <div class="row">
+                                    {% for checkbox in form.time_id %}
+                                        <div class="col-auto">
+                                            <div class="form-check form-switch">
+                                                <label class="form-check-label"
+                                                       for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+
+                                                <input class="form-check-input" type="checkbox" name="time_id"
+                                                       value="{{ checkbox.data.value }}"
+                                                       id="{{ checkbox.id_for_label }}">
+
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-error">{{ f.errors }}</div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-mt-3 col-auto">
+                                <label name="{{ f.name }}" class="form-control-label"
+                                       for="{{ f.id_for_label }}">{{ form.equip_id.label }}<span
+                                        class="text-danger"> *</span></label>
+                                <div class="row">
+                                    {% for checkbox in form.equip_id %}
+                                        <div class="col-auto">
+                                            <div class="form-check form-switch">
+                                                <label class="form-check-label"
+                                                       for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+
+                                                <input class="form-check-input" type="checkbox" name="equip_id"
+                                                       value="{{ checkbox.data.value }}"
+                                                       id="{{ checkbox.id_for_label }}">
+
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-error">{{ f.errors }}</div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-end mt-4">
+                            <div class="form-group col-sm-7">
+                                <button type="submit" class="btn btn-success">Добавить</button>
+                            </div>
+                        </div>
+                        <span>{{ error }}</span>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

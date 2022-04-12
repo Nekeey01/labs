@@ -1,0 +1,172 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block cssfiles %}
+    <link type="text/css" href="{% static 'css/datepicker.css' %}" rel="stylesheet"/>
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+          rel="stylesheet"/>
+
+    <style>
+        .t-w {
+            color: #c8c8c8e8;
+
+        }
+
+        body {
+            color: #c8c8c8e8;
+            overflow-x: hidden;
+            height: 100%;
+            background: -webkit-linear-gradient(90deg, #241111, #381555);
+            background: linear-gradient(90deg, #241111, #381555);
+            background-size: 100% 100%
+        }
+
+        .card {
+            padding: 30px 40px;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            background: linear-gradient(150deg, #3a1446, #431a62);
+            border: none !important;
+            border-radius: 20px;
+            box-shadow: 0 1px 50px 0 rgba(126, 123, 24, 0.34);
+        {#box-shadow: 58px 58px 18px 0px rgba(126, 123, 24, 0.47);#}
+        }
+
+        .blue-text {
+            color: #00BCD4
+        }
+
+        .form-control-label {
+            margin-bottom: 0
+        }
+
+
+        button {
+            padding: 8px 15px;
+            border-radius: 5px !important;
+            margin: 5px 0px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 18px !important;
+            font-weight: 300;
+        }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400
+        }
+
+        .btn-block {
+            text-transform: uppercase;
+            font-size: 15px !important;
+            font-weight: 400;
+            height: 43px;
+            cursor: pointer
+        }
+
+        .btn-block:hover {
+            color: #fff !important
+        }
+
+        button:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0
+        }
+
+        ul {
+            list-style-type: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-7">
+                <div class="card">
+
+                    <h3 class="t-w text-center mb-4">{{ title }}</h3>
+                    <form class="form-card" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="t-w form-error">{{ form.non_field_errors }}</div>
+
+                        <div class="t-w form-error">{{ errors }}</div>
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-auto">
+                                <label name="{{ form.reserv_date.name }}" for="{{ form.reserv_date.id_for_label }}"
+                                       class="t-w form-control-label">{{ form.reserv_date.label }}<span
+                                        class="text-danger"> *</span></label>
+                                <div class="t-w form-error">{{ form.reserv_date.errors }}</div>
+
+                                {{ form.reserv_date }}
+                            </div>
+
+                        </div>
+
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% for i in list_times %}
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="{{ i }}" id="{{ i }}"
+                                       name="intervals">
+                                <label class="form-check-label" for="{{ i }}">{{ i }}</label>
+                            </div>
+                        {% endfor %}
+
+
+                        <div class="row justify-content-end mt-4">
+                            <div class="form-group col-sm-7">
+                                <button type="submit" class="btn-block btn-success">Добавить</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="date" data-info="{{ date }}"/>
+    <input type="hidden" id="res_time" data-info="{{ res_time }}"/>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').val($("#date").attr("data-info"));
+            $('#id_reserv_time').val($("#res_time").attr("data-info")).change();
+            console.log("DATE", $("#date").attr("data-info"));
+            console.log("RES_TIME", $("#res_time").attr("data-info"));
+            $('#datepicker').datepicker({
+                format: 'dd.mm.yyyy',
+                todayHighlight: true,
+                toggleActive: true,
+                startDate: new Date(),
+
+            });
+
+        });
+    </script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+{% endblock %}

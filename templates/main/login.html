@@ -1,0 +1,65 @@
+{#{% extends 'main/base.html' %}#}
+{##}
+{#{% block title %}#}
+{#{{ title }}#}
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#{% block content %}#}
+{#    <h1>{{ title }}</h1>#}
+
+
+{% load widget_tweaks %}
+
+  <main class="form-signin text-center">
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1 class="h3 mb-3 fw-normal">{{ title }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+
+        <div class="modal-body">
+            <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+              {% for error in form.non_field_errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+
+            {% for f in form %}
+                <div class="form-floating">
+{#                    {{ f }}#}
+                    {% render_field f class="form-control"%}
+                    <label for="{{ f.id_for_label }}">{{f.label}}</label>
+
+                    <div class="{% if f.errors %} invalid{% endif %}">
+                      {% for error in f.errors %}
+                        <p class="help-block">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                </div>
+
+            {% endfor %}
+        <input type="hidden" name="next" value="{{ success_url }}">
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+
+        </div>
+
+
+
+
+    </form>
+  </main>
+{#{% endblock %}#}
+
+
+
+
+

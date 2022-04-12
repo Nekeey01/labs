@@ -1,0 +1,59 @@
+{% load static %}
+<div class="container-sm text-center" id="aboba">
+    {% if cab %}
+        <div class="row row-cols-md-2 g-4">
+            {% for p in cab %}
+                <div class="card-columns col-md-3">
+                    <div class="card bg-dark  mx-sm-1 p-3 text-center" style="border-radius: 7px">
+                        <div class="card-body bg-transparent">
+                            <h3 class="card-title text-white">Номер лаборатории - {{ p.number }}</h3>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item bg-dark border-0 border-dark">
+                                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collaps{{ p.number }}"
+                                   role="button" aria-expanded="false" aria-controls="collaps{{ p.number }}">
+                                    Доступное время
+                                </a>
+                            </li>
+                            <div class="collapse" id="collaps{{ p.number }}">
+                                {% for time_interval in p.time_id.all %}
+                                    <li class="list-group-item list-group-item-white border-3 border-dark btn-danger rounded-pill"
+                                        style="background-color:#ffc107 !important;">
+                                        <a
+                                           class="text-decoration-none link-dark text-black">{{ time_interval.time }}</a>
+                                    </li>
+                                {% endfor %}
+                            </div>
+
+                            <li class="list-group-item bg-dark border-0 border-dark">
+                                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse{{ p.pk }}"
+                                   role="button" aria-expanded="false" aria-controls="collapse{{ p.pk }}">
+                                    Доступное ПО
+                                </a>
+                            </li>
+                            <div class="collapse" id="collapse{{ p.pk }}">
+                                {% for equip in p.equip_id.all %}
+                                    <li class="list-group-item list-group-item-white border-3 border-dark btn-danger rounded-pill"
+                                        style="background-color:#ffc107 !important;">
+                                        <a
+                                           class="text-decoration-none link-dark text-black">{{ equip.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </div>
+                        </ul>
+
+                        <div class="card-footer bg-transparent ">
+                            <button id="btn_reserv" data-url="{{ p.get_absolute_url }}"
+                                    data-info="/moder_reservation/{{ p.number }}" class="btn btn-primary">Забронировать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Записей нет</p>
+    {% endif %}
+</div>
+
+<script src="{% static 'js/press_btn_for_reserv_ajax.js' %}"></script>
