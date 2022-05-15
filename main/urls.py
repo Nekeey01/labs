@@ -29,6 +29,7 @@ urlpatterns = [
     path('list_users_zayavka/<pk>', ListUsersZayavka.as_view(), name='list_users_zayavka'),
 
     path('list_zayvka_from_ucheb', ShowZayvkaFromUcheb.as_view(), name='list_zayvka_from_ucheb'),
+    path('journal_zayavok', ShowJournal.as_view(), name='journal_zayavok'),
     path('update_zayvka_from_ucheb/<pk>', UpdateZayvkaFromUcheb.as_view(), name='update_zayvka_from_ucheb'),
 
     path('list_zayvka_from_inf', ShowZayvkaFromInf.as_view(), name='list_zayvka_from_inf'),

@@ -468,7 +468,8 @@ class ListUsersZayavka(DataMixin, ListView):
             if key.startswith('btn_'):
                 btn_pk = key[4:]
                 record = Zayavka.objects.get(id=btn_pk)
-                record.delete()
+                record.status = "Отклонена пользователем"
+                record.save()
 
         return super(ListUsersZayavka, self).get(request, *args, **kwargs)
 
@@ -495,6 +496,29 @@ class ShowZayvkaFromUcheb(DataMixin, ListView):
                 record.save()
 
         return super(ShowZayvkaFromUcheb, self).get(request, *args, **kwargs)
+
+
+class ShowJournal(DataMixin, ListView):
+    model = Zayavka
+    template_name = "main/ucheb/journal.html"
+    context_object_name = "Journal"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_content(title="Список заявок")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Zayavka.objects.all().order_by('-id')
+
+    def get(self, request, *args, **kwargs):
+        for key in request.GET.keys():
+            if key.startswith('btn_'):
+                btn_pk = key[4:]
+                record = Zayavka.objects.get(id=btn_pk)
+                record.delete()
+
+        return super(ShowJournal, self).get(request, *args, **kwargs)
 
 
 ## Создание кабинета
