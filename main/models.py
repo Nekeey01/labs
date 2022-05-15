@@ -1,8 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 from django.urls import reverse
 
 
@@ -10,6 +7,7 @@ from django.urls import reverse
 class CustomUser(AbstractUser):
     avatar = models.ImageField('Аватар', upload_to='avatar/%Y/%m/%d/', default='avatar/default/kot.png')
     middle_name = models.CharField('Отчество', max_length=250, blank=True, null=True)
+
     def __str__(self):
         return self.username
 
@@ -55,17 +53,40 @@ class Cabinet(models.Model):
         return reverse('reservation', kwargs={'cab_id': self.number})
 
 
-class Reserved_Cabinet(models.Model):
+## таблица оборудования
+class Zayavka(models.Model):
+    date_zayavka = models.DateField('День подачи заявки')
 
     reserv_date = models.DateField('День')
     reserv_time = models.CharField('Время', max_length=50, null=True, blank=True)
 
     ## привязка пк
+    zayavka_cab = models.ForeignKey(Cabinet, on_delete=models.PROTECT)
+
+    zayavka_user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='zayavka_user_id')
+
+    status = models.CharField('Статус', max_length=50, null=True, blank=True)
+    reason = models.CharField('Причина отказа', max_length=250, null=True, blank=True)
+    wish = models.TextField('Пожелание к оборудованию', max_length=250, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Заявка'
+        verbose_name_plural = "Заявки"
+
+    def __str__(self):
+        return f"{self.pk}"
+
+
+class Reserved_Cabinet(models.Model):
+    reserv_date = models.DateField('День')
+    reserv_time = models.CharField('Время', max_length=50, null=True, blank=True)
+
+    ## привязка пк
     cab = models.ForeignKey(Cabinet, on_delete=models.PROTECT)
-    # reserv_time = models.ForeignKey(TimeInterval, on_delete=models.PROTECT)
 
     user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='user_id')
-    # reserv_time = models.ForeignKey(Cabinet, to_field="", on_delete=models.PROTECT, related_name='reserv_time_id', null=True, blank=True)
+
+    # zayavka = models.ForeignKey(Zayavka, on_delete=models.PROTECT)
 
 
     class Meta:
@@ -73,8 +94,4 @@ class Reserved_Cabinet(models.Model):
         verbose_name_plural = "Зарезервированные кабинеты"
 
     def __str__(self):
-        return f"{self.cab.number}"
-
-
-
-
+        return f"{self.zayavka.cab.number}"

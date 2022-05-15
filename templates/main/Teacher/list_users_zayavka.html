@@ -1,0 +1,307 @@
+{% extends 'main/base.html' %}
+
+{% block cssfiles %}
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css"
+          rel="stylesheet"/>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/jquery.tablesorter.pager.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css">
+    <link type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.css" rel="stylesheet"/>
+
+    <style>
+        .tablesorter-pager .btn-group-sm .btn {
+            font-size: 1.2em; /* make pager arrows more visible */
+        }
+
+        .booba {
+            padding: 2%;
+        }
+
+        .paddi {
+            padding: 15px;
+        }
+
+        .table .thead-dark th {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
+
+        .bootstrap_buttons button {
+            margin: 0 0 0 2%;
+        }
+
+        .hid_btn {
+            visibility: hidden;
+            font-size: 0;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+               type="button" role="tab" aria-controls="home" aria-selected="true">Мои данные</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+               type="button" role="tab" aria-controls="profile" aria-selected="false">Мои
+                резервации</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+
+        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <form method="get" enctype="multipart/form-data">
+                <div class="paddi"></div>
+                <div class="bootstrap_buttons">
+
+                    <button type="button" class="reset btn btn-danger" data-column="0" data-filter="">Очистить фильтры
+                    </button>
+                    <br>
+                </div>
+
+                <div class="booba" id="aboba">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Айди</th>
+                            <th scope="col">Номер лабы</th>
+                            <th scope="col">Дата подачи заявки</th>
+                            <th scope="col">Дата резервации лаборатории</th>
+                            <th scope="col">Время резервации лаборатории</th>
+
+                            <th scope="col" class="filter-select filter-exact" data-placeholder="Все">Статус</th>
+                            <th scope="col">Удалить заявку</th>
+
+                        </tr>
+                        </thead>
+
+                        <tfoot>
+                        <tr>
+                            <th>Айди</th>
+                            <th>Номер лаб</th>
+                            <th>Дата подачи заявки</th>
+                            <th>Дата резервации лаборатории</th>
+                            <th scope="col">Время резервации лаборатории</th>
+
+                            <th>Статус</th>
+                            <th>Удалить заявку</th>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ts-pager">
+                                <div class="form-inline">
+                                    <div class="btn-group btn-group-sm mx-1" role="group">
+                                        <button type="button" class="btn btn-secondary first" title="В начало">⇤
+                                        </button>
+                                        <button type="button" class="btn btn-secondary prev" title="Прошлая страница">←
+                                        </button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm mx-1" role="group">
+                                        <button type="button" class="btn btn-secondary next" title="Следующая страница">
+                                            →
+                                        </button>
+                                        <button type="button" class="btn btn-secondary last" title="В конец">⇥</button>
+                                    </div>
+                                    <select class="form-control-sm custom-select px-1 pagesize" title="Кол-во записей">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">Все</option>
+                                    </select>
+                                    <select class="form-control-sm custom-select px-4 mx-1 pagenum"
+                                            title="Номер страницы"></select>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+
+                        <tbody>
+
+                        {% for i in Zayavka_in_time %}
+                            {% if i.status == "Одобрено инф отделом" %}
+                                <tr class="table-warning">
+                                    {% elif i.status == "В ожидании" %}
+                                <tr class="table-light">
+                            {% endif %}
+
+                        <th scope="row">{{ i.pk }}</th>
+                        <td>{{ i.zayavka_cab }}</td>
+                        <td>{{ i.date_zayavka }}</td>
+                        <td>{{ i.reserv_date }}</td>
+                        <td>{{ i.reserv_time }}</td>
+
+                        <td>{{ i.status }}</td>
+                        <td>
+                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="btn btn-danger">Удалить
+                                заявку
+                            </button>
+                            <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить заявку
+                            </button>
+                        </td>
+
+                        </tr>
+
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <form method="get" enctype="multipart/form-data">
+                <div class="paddi"></div>
+                <div class="bootstrap_buttons">
+
+                    <button type="button" class="reset btn btn-danger" data-column="0" data-filter="">Очистить фильтры
+                    </button>
+                    <br>
+                </div>
+
+                <div class="booba" id="aboba">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Айди</th>
+                            <th scope="col">Номер лабы</th>
+                            <th scope="col">Дата подачи заявки</th>
+                            <th scope="col">Дата резервации лаборатории</th>
+                            <th scope="col">Время резервации лаборатории</th>
+                            <th scope="col">Причина отказа</th>
+                            <th scope="col" class="filter-select filter-exact" data-placeholder="Все">Статус</th>
+
+                        </tr>
+                        </thead>
+
+                        <tfoot>
+                        <tr>
+                            <th>Айди</th>
+                            <th>Номер лаб</th>
+                            <th>Дата подачи заявки</th>
+                            <th>Дата резервации лаборатории</th>
+                            <th>Время резервации лаборатории</th>
+                            <th>Причина отказа</th>
+                            <th>Статус</th>
+                        </tr>
+                        <tr>
+                            <th colspan="7" class="ts-pager">
+                                <div class="form-inline">
+                                    <div class="btn-group btn-group-sm mx-1" role="group">
+                                        <button type="button" class="btn btn-secondary first" title="В начало">⇤
+                                        </button>
+                                        <button type="button" class="btn btn-secondary prev" title="Прошлая страница">←
+                                        </button>
+                                    </div>
+                                    <span class="pagedisplay"></span>
+                                    <div class="btn-group btn-group-sm mx-1" role="group">
+                                        <button type="button" class="btn btn-secondary next" title="Следующая страница">
+                                            →
+                                        </button>
+                                        <button type="button" class="btn btn-secondary last" title="В конец">⇥</button>
+                                    </div>
+                                    <select class="form-control-sm custom-select px-1 pagesize" title="Кол-во записей">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">Все</option>
+                                    </select>
+                                    <select class="form-control-sm custom-select px-4 mx-1 pagenum"
+                                            title="Номер страницы"></select>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+
+                        <tbody>
+
+                        {% for i in Zayavka_complete %}
+
+                            {% if i.status == "Отклонена" %}
+                                <tr class="table-danger">
+                                    {% elif i.status == "Одобрено" %}
+                                <tr class="table-success">
+                            {% endif %}
+
+                        <th scope="row">{{ i.pk }}</th>
+                        <td>{{ i.zayavka_cab }}</td>
+                        <td>{{ i.date_zayavka }}</td>
+                        <td>{{ i.reserv_date }}</td>
+                        <td>{{ i.reserv_time }}</td>
+                        <td>{{ i.reason }}</td>
+                        <td>{{ i.status }}</td>
+
+
+                        </tr>
+
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/extras/jquery.tablesorter.pager.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("table").tablesorter({
+                theme: "bootstrap",
+                widthFixed: true,
+                widgets: ["filter",],
+
+                widgetOptions: {
+
+                    columns: ["primary", "secondary", "tertiary"],
+                    filter_reset: ".reset",
+                    filter_cssFilter: [
+                        'form-control',
+                        'form-control',
+                        'form-control custom-select', // select needs custom class names :(
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control'
+                    ]
+                }
+            })
+                .tablesorterPager({
+                    container: $(".ts-pager"),
+                    cssGoto: ".pagenum",
+                    removeRows: false,
+                    output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+                });
+            $("#del_z").click(function (e) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Вы уверены?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Удалить',
+                    cancelButtonText: `Закрыть`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#del_zz').click(); // открытие окна логина
+                    }
+                })
+            })
+        });
+
+    </script>
+
+{% endblock %}

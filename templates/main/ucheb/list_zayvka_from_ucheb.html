@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+    <form method="get" enctype="multipart/form-data">
+
+        <div class="container" id="aboba">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th class="text-center" scope="col">#</th>
+                    <th class="text-center" scope="col">Юзернейм</th>
+                    <th class="text-center" scope="col">Номер лаборатории</th>
+                    <th class="text-center" scope="col">День посутпления заявки</th>
+                    <th class="text-center" scope="col">Обработать заявку</th>
+                </tr>
+                </thead>
+                {% for i in Zayavka %}
+                    <tbody>
+                    <tr>
+                        <th class="text-center" scope="row">{{ forloop.counter }}</th>
+                        <td class="text-center">{{ i.zayavka_user_id.last_name }} {{ i.zayavka_user_id.first_name }}</td>
+                        <td class="text-center">{{ i.zayavka_cab.number }}</td>
+                        <td class="text-center">{{ i.date_zayavka }}</td>
+                        <td class="text-center">
+                            <button name="btn_{{ i.pk }}" type="submit" class="btn btn-success">Одобрить</button>
+                            <a id="obrabotka_modal" data-form-url="{% url 'update_zayvka_from_ucheb' i.pk %}"
+                               type="button"
+                               name="obrbotka" class="btn btn-danger">Отклонить заявку</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(function () {
+
+            $("#obrabotka_modal").each(function () {
+                $(this).modalForm({formURL: $(this).data("form-url")});
+            });
+
+        });
+    </script>
+
+{% endblock %}

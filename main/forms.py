@@ -27,6 +27,8 @@ class LoginUserForm(AuthenticationForm):
         attrs={'class': 'form-control', 'placeholder': 'Пароль', 'type': 'password'}))
 
 
+from django.contrib.admin.widgets import FilteredSelectMultiple
+
 ## форма создания Кабинета
 class CreateCabForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -36,6 +38,8 @@ class CreateCabForm(ModelForm):
         self.fields['time_id'].label = "Выберите интервалы времени"
         self.fields['equip_id'].label = "Выберите ПО"
 
+    equip_id = forms.ModelMultipleChoiceField(queryset=Equipment.objects.all(), required=True,
+                                              widget=FilteredSelectMultiple("Proveedor", is_stacked=False))
 
     class Meta:
         model = Cabinet
@@ -62,8 +66,9 @@ class Reserv_Cab_Form(ModelForm):
         # self.fields['reserv_time'].choices = [(i, str(i)) for i in Cabinet.objects.filter(number=cab_id).values_list("time_id__time", flat=True)]
 
     class Meta:
-        model = Reserved_Cabinet
-        fields = ["reserv_date"]
+        # model = Reserved_Cabinet
+        model = Zayavka
+        fields = ["reserv_date", 'wish']
         widgets = {
             "reserv_date": forms.DateInput(attrs={'class': 'form-control datepicker mr-2', 'id': 'datepicker', }),
             ## выпадающий список
@@ -142,3 +147,17 @@ class CreateTeacherForm(ModelForm):
     class Meta:
         model = CustomUser
         fields = ["last_name", "first_name", "middle_name", "email", "password"]
+
+
+class UpdateZayvkaForm(BSModalModelForm):
+    class Meta:
+        model = Zayavka
+        fields = ['reason']
+
+
+class Media:
+    css = {
+        'all':('/admin/css/widgets.css',),
+    }
+    # jsi18n is required by the widget
+    js = ('/admin/jsi18n/',)
