@@ -58,7 +58,7 @@
                             <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
                         {% endif %}
 
-                    {% elif request.user|has_group:"Ucheb" and m.url_name == 'list_zayvka_from_ucheb' %}
+                    {% elif request.user|has_group:"Ucheb" and m.url_name == 'list_zayvka_from_ucheb' or request.user|has_group:"Ucheb" and m.url_name == 'journal_zayavok' %}
                         {% if m.path == request.path  %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}

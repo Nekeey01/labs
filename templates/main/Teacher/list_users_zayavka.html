@@ -137,7 +137,7 @@
 
                         <td>{{ i.status }}</td>
                         <td>
-                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="btn btn-danger">Удалить
+                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="bb tn btn-danger">Удалить
                                 заявку
                             </button>
                             <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить заявку
@@ -227,6 +227,7 @@
                                 <tr class="table-danger">
                                     {% elif i.status == "Одобрено" %}
                                 <tr class="table-success">
+
                             {% endif %}
 
                         <th scope="row">{{ i.pk }}</th>
@@ -258,7 +259,7 @@
 
 
     <script type="text/javascript">
-        $(function () {
+        $(document).ready(function () {
             $("table").tablesorter({
                 theme: "bootstrap",
                 widthFixed: true,
@@ -286,7 +287,7 @@
                     output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
 
                 });
-            $("#del_z").click(function (e) {
+            $(".bb").click(function (e) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Вы уверены?',
