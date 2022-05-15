@@ -33,14 +33,32 @@
                             <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
                         {% endif %}
 
-                    {% elif request.user|has_group:"Teacher" and m.url_name == 'show_pc' %}
+                    {% elif request.user|has_group:"Teacher" and m.url_name == 'show_pc' or request.user|has_group:"Teacher" and m.url_name == 'list_users_zayavka' %}
+                        {% if m.path == request.path  %}
+                            <div class="btn btn-outline-primary">{{ m.title }}</div>
+                        {% else %}
+                            {% if m.url_name == 'list_users_zayavka' %}
+                                <a class="nav-link px-2 text-white" href="{% url m.url_name request.user.pk %}">{{ m.title }}</a>
+                            {% else %}
+                                <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
+                            {% endif %}
+                        {% endif %}
+
+                    {% elif request.user|has_group:"Admin" and m.url_name == 'create_cab' or request.user|has_group:"Admin" and m.url_name == 'create_time_interval' or request.user|has_group:"Admin" and m.url_name == 'load_teacher' or request.user|has_group:"Admin" and m.url_name == 'create_equipment' or request.user|has_group:"Admin" and m.url_name == 'create_teacher' %}
                         {% if m.path == request.path  %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}
                             <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
                         {% endif %}
 
-                    {% elif request.user|has_group:"Admin" and m.url_name == 'create_cab' or request.user|has_group:"Admin" and m.url_name == 'create_time_interval' or request.user|has_group:"Admin" and m.url_name == 'load_teacher' or request.user|has_group:"Admin" and m.url_name == 'create_equipment' or request.user|has_group:"Admin" and m.url_name == 'create_teacher' %}
+                    {% elif request.user|has_group:"Inf" and m.url_name == 'list_zayvka_from_inf' %}
+                        {% if m.path == request.path  %}
+                            <div class="btn btn-outline-primary">{{ m.title }}</div>
+                        {% else %}
+                            <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
+                        {% endif %}
+
+                    {% elif request.user|has_group:"Ucheb" and m.url_name == 'list_zayvka_from_ucheb' %}
                         {% if m.path == request.path  %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}

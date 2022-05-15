@@ -1,0 +1,28 @@
+{% load widget_tweaks %}
+
+<main class="form-signin text-center">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1 class="h3 mb-3 fw-normal">{{ title }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+
+        <div class="modal-body">
+            <input id="reason" name="reason" type="text" class="form-control form-input"
+                   placeholder="Причина">
+
+            <input type="hidden" name="next" value="{{ success_url }}">
+        </div>
+
+        <div class="modal-footer">
+            <button class="w-100 btn btn-lg btn-primary" type="submit" value="Принять" name="like">Отправить
+            </button>
+        </div>
+
+
+    </form>
+</main>
+
+
