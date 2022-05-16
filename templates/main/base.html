@@ -26,7 +26,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 {% for m in menu %}
-                    {% if m.url_name == 'home' %}
+                    {% if m.url_name == 'home' or m.url_name == 'analitic' %}
                         {% if m.path == request.path %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}
@@ -96,6 +96,7 @@
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 
 {% block content %}{% endblock %}
 

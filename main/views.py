@@ -4,11 +4,12 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalLoginView, B
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import Group
 from django.core.mail import EmailMessage
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.timezone import make_aware
-from django.views.generic import CreateView, ListView, UpdateView, FormView
+from django.views.generic import CreateView, ListView, UpdateView, FormView, TemplateView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -460,7 +461,8 @@ class ListUsersZayavka(DataMixin, ListView):
 
     def get_queryset(self):
         return Zayavka.objects.filter(
-            Q(zayavka_user_id=self.kwargs['pk']) & (Q(status="Одобрено инф отделом") | Q(status="В ожидании"))).order_by(
+            Q(zayavka_user_id=self.kwargs['pk']) & (
+                    Q(status="Одобрено инф отделом") | Q(status="В ожидании"))).order_by(
             '-id')
 
     def get(self, request, *args, **kwargs):
@@ -494,6 +496,11 @@ class ShowZayvkaFromUcheb(DataMixin, ListView):
                 record = Zayavka.objects.get(id=btn_pk)
                 record.status = "Одобрено"
                 record.save()
+
+                res_cab = Reserved_Cabinet(reserv_date=record.reserv_date, reserv_time=record.reserv_time,
+                                           cab=record.zayavka_cab,
+                                           user_id=record.zayavka_user_id)
+                res_cab.save()
 
         return super(ShowZayvkaFromUcheb, self).get(request, *args, **kwargs)
 
@@ -584,3 +591,18 @@ class UpdateZayvkaFromInf(DataMixin, BSModalUpdateView):
 
     def get_success_url(self):
         return reverse_lazy('list_zayvka_from_inf')
+
+
+## Аналитика
+class Analitics(DataMixin, TemplateView):
+    template_name = 'main/analitics/analitics.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_content(title="Аналитика",
+                                      qs=Reserved_Cabinet.objects.all().values_list('reserv_date', flat=True).distinct().order_by('reserv_date'),
+                                      qs2=Reserved_Cabinet.objects.values('reserv_date').annotate(count_reslabs=Count('reserv_date')).order_by('reserv_date'),
+
+                                      qss=Zayavka.objects.all().values_list('status', flat=True).distinct().order_by("status"),
+                                      qss2=Zayavka.objects.values('status').annotate(count_zayavok=Count('status')).order_by("status"))
+        return dict(list(context.items()) + list(c_def.items()))

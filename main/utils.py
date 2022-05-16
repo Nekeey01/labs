@@ -24,6 +24,7 @@ menu = [{'title': 'Главная', 'url_name': 'home', 'path': '/'},
         {'title': 'Список заявок как инф', 'url_name': 'list_zayvka_from_inf', 'path': '/list_zayvka_from_inf'},
         {'title': 'Список заявок', 'url_name': 'list_users_zayavka', 'path': '/list_users_zayavka'},
         {'title': 'Журнал заявок', 'url_name': 'journal_zayavok', 'path': '/journal_zayavok'},
+        {'title': 'Аналитика', 'url_name': 'analitic', 'path': '/analitic'},
         ]
 
 class DataMixin:
