@@ -1,6 +1,10 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+{% block title %}
+    {{ title }}
+{% endblock %}
+
 {% block cssfiles %}
     <link type="text/css"
           href="{% static 'css/analiticstyli.css' %}"
