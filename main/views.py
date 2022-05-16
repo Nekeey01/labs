@@ -454,7 +454,7 @@ class ListUsersZayavka(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Список заявок", Zayavka_complete=Zayavka.objects.filter(
+        c_def = self.get_user_content(title="Список моих заявок", Zayavka_complete=Zayavka.objects.filter(
             Q(zayavka_user_id=self.kwargs['pk']) & (Q(status="Отклонена") | Q(status="Одобрено"))).order_by(
             '-id'))
         return dict(list(context.items()) + list(c_def.items()))
@@ -512,7 +512,7 @@ class ShowJournal(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Список заявок")
+        c_def = self.get_user_content(title="Журнал всех заявок")
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
@@ -537,7 +537,7 @@ class UpdateZayvkaFromUcheb(DataMixin, BSModalUpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Отклонение по фазе")
+        c_def = self.get_user_content(title="Укажите причину отклонения заявки")
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form):
@@ -554,7 +554,7 @@ class ShowZayvkaFromInf(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Главная!")
+        c_def = self.get_user_content(title="Список заявок как инф")
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
@@ -580,7 +580,7 @@ class UpdateZayvkaFromInf(DataMixin, BSModalUpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Самое время отдохнуть")
+        c_def = self.get_user_content(title="Укажите причину отклонения заявки")
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form):
