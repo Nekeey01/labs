@@ -124,7 +124,7 @@
                         <tr class="table-light">
                     {% endif %}
 
-                <th scope="row">{{ i.pk }}</th>
+                <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ i.zayavka_cab }}</td>
                 <td>{{ i.date_zayavka }}</td>
                 <td>{{ i.reserv_date }}</td>

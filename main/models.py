@@ -94,4 +94,4 @@ class Reserved_Cabinet(models.Model):
         verbose_name_plural = "Зарезервированные кабинеты"
 
     def __str__(self):
-        return f"{self.zayavka.cab.number}"
+        return f"{self.cab.number}"
