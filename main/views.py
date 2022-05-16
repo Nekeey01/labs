@@ -263,7 +263,7 @@ class Reserv_Cab(DataMixin, CreateView):
             email = EmailMessage(f"Резервация лаборатории № {self.gg}",
                                  f"Здравствуйте {self.user_id.first_name} {self.user_id.last_name}\nВы в {datetime.now().strftime('%H:%M')} зарезервировали лабораторию №{self.gg}\nВся информация по резервации:\nДата - {form.cleaned_data['reserv_date']}\nВремя - {g}\nНомер кабинета - {self.gg}\nПО, имеющееся в кабинете - {po}",
                                  to=[self.user_id.email])
-            email.send()
+            # email.send()
 
         # return super(Reserv_Cab, self).form_valid(form)
         return HttpResponseRedirect(self.success_url)
@@ -404,7 +404,7 @@ def handle_uploaded_file(f):
             email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
                                  f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
                                  to=[email])
-            email.send()
+            # email.send()
             my_group = Group.objects.get(name='Teacher')
             my_group.user_set.add(user)
 
@@ -438,7 +438,7 @@ class CreateTeacher(DataMixin, CreateView):
         email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
                              f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
                              to=[email])
-        email.send()
+        # email.send()
 
         my_group = Group.objects.get(name='Teacher')
         my_group.user_set.add(user)
