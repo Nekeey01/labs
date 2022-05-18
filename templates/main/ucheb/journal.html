@@ -59,6 +59,7 @@
             <table class="table table-bordered">
                 <thead class="thead-dark">
                 <tr>
+                    <th scope="col">№</th>
                     <th scope="col">Айди</th>
                     <th scope="col">Номер лабы</th>
                     <th scope="col">Дата подачи заявки</th>
@@ -75,6 +76,7 @@
 
                 <tfoot>
                 <tr>
+                    <th>№</th>
                     <th>Айди</th>
                     <th>Номер лаб</th>
                     <th>Дата подачи заявки</th>
@@ -128,6 +130,7 @@
                         <tr class="table-light">
                     {% endif %}
 
+                <th scope="row">{{ i.pk }}</th>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ i.zayavka_cab }}</td>
                 <td>{{ i.date_zayavka }}</td>

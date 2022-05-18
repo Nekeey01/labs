@@ -197,7 +197,7 @@ def return_cab_with_equ(query):
 class Reserv_Cab(DataMixin, CreateView):
     form_class = Reserv_Cab_Form
     template_name = 'main/reservation.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('show_pc')
     gg = 0
     user_id = 0
     intervals = 0
@@ -322,7 +322,7 @@ class Profile(DataMixin, UpdateView):
 class CreateEquipment(DataMixin, CreateView):
     form_class = CreateEquipmentForm
     template_name = 'main/create_equipment.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_equipment')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -334,7 +334,7 @@ class CreateEquipment(DataMixin, CreateView):
 class CreateCab(DataMixin, CreateView):
     form_class = CreateCabForm
     template_name = 'main/create_cab.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_cab')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -346,7 +346,7 @@ class CreateCab(DataMixin, CreateView):
 class CreateTimeInterval(DataMixin, CreateView):
     form_class = CreateTimeIntervalForm
     template_name = 'main/create_time_inteval.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_time_interval')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -358,7 +358,7 @@ class CreateTimeInterval(DataMixin, CreateView):
 class LoadTeacher(DataMixin, FormView):
     form_class = LoadTeacherForm
     template_name = 'main/load_teacher.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('load_teacher')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -416,7 +416,7 @@ def handle_uploaded_file(f):
 class CreateTeacher(DataMixin, CreateView):
     form_class = CreateTeacherForm
     template_name = 'main/create_teacher.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_teacher')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
