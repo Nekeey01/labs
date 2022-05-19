@@ -66,8 +66,8 @@ class Zayavka(models.Model):
     zayavka_user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='zayavka_user_id')
 
     status = models.CharField('Статус', max_length=50, null=True, blank=True)
-    reason = models.CharField('Причина отказа', max_length=250, null=True, blank=True)
-    wish = models.TextField('Пожелание к оборудованию', max_length=250, null=True, blank=True)
+    reason = models.CharField('Причина отказа', max_length=250, null=True, blank=True, default="")
+    wish = models.TextField('Пожелание к оборудованию', max_length=250, null=True, blank=True, default="")
 
     class Meta:
         verbose_name = 'Заявка'

@@ -197,7 +197,7 @@ def return_cab_with_equ(query):
 class Reserv_Cab(DataMixin, CreateView):
     form_class = Reserv_Cab_Form
     template_name = 'main/reservation.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('show_pc')
     gg = 0
     user_id = 0
     intervals = 0
@@ -263,7 +263,7 @@ class Reserv_Cab(DataMixin, CreateView):
             email = EmailMessage(f"Резервация лаборатории № {self.gg}",
                                  f"Здравствуйте {self.user_id.first_name} {self.user_id.last_name}\nВы в {datetime.now().strftime('%H:%M')} зарезервировали лабораторию №{self.gg}\nВся информация по резервации:\nДата - {form.cleaned_data['reserv_date']}\nВремя - {g}\nНомер кабинета - {self.gg}\nПО, имеющееся в кабинете - {po}",
                                  to=[self.user_id.email])
-            email.send()
+            # email.send()
 
         # return super(Reserv_Cab, self).form_valid(form)
         return HttpResponseRedirect(self.success_url)
@@ -322,7 +322,7 @@ class Profile(DataMixin, UpdateView):
 class CreateEquipment(DataMixin, CreateView):
     form_class = CreateEquipmentForm
     template_name = 'main/create_equipment.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_equipment')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -334,7 +334,7 @@ class CreateEquipment(DataMixin, CreateView):
 class CreateCab(DataMixin, CreateView):
     form_class = CreateCabForm
     template_name = 'main/create_cab.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_cab')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -346,7 +346,7 @@ class CreateCab(DataMixin, CreateView):
 class CreateTimeInterval(DataMixin, CreateView):
     form_class = CreateTimeIntervalForm
     template_name = 'main/create_time_inteval.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_time_interval')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -358,7 +358,7 @@ class CreateTimeInterval(DataMixin, CreateView):
 class LoadTeacher(DataMixin, FormView):
     form_class = LoadTeacherForm
     template_name = 'main/load_teacher.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('load_teacher')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -404,7 +404,7 @@ def handle_uploaded_file(f):
             email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
                                  f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
                                  to=[email])
-            email.send()
+            # email.send()
             my_group = Group.objects.get(name='Teacher')
             my_group.user_set.add(user)
 
@@ -416,7 +416,7 @@ def handle_uploaded_file(f):
 class CreateTeacher(DataMixin, CreateView):
     form_class = CreateTeacherForm
     template_name = 'main/create_teacher.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('create_teacher')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -438,7 +438,7 @@ class CreateTeacher(DataMixin, CreateView):
         email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
                              f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
                              to=[email])
-        email.send()
+        # email.send()
 
         my_group = Group.objects.get(name='Teacher')
         my_group.user_set.add(user)

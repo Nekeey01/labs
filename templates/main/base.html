@@ -26,7 +26,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 {% for m in menu %}
-                    {% if m.url_name == 'home' or m.url_name == 'analitic' %}
+                    {% if m.url_name == 'home' %}
                         {% if m.path == request.path %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}
@@ -58,7 +58,7 @@
                             <a class="nav-link px-2 text-white" href="{% url m.url_name %}">{{ m.title }}</a>
                         {% endif %}
 
-                    {% elif request.user|has_group:"Ucheb" and m.url_name == 'list_zayvka_from_ucheb' or request.user|has_group:"Ucheb" and m.url_name == 'journal_zayavok' %}
+                    {% elif request.user|has_group:"Ucheb" and m.url_name == 'list_zayvka_from_ucheb' or request.user|has_group:"Ucheb" and m.url_name == 'journal_zayavok' or request.user|has_group:"Ucheb" and m.url_name == 'analitic' %}
                         {% if m.path == request.path  %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}
