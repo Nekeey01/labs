@@ -1,0 +1,91 @@
+
+{#    <form method="get" enctype="multipart/form-data">#}
+        <div class="paddi"></div>
+        <div class="bootstrap_buttons">
+
+            <button type="button" class="reset btn btn-danger" data-column="0" data-filter="">Очистить фильтры
+            </button>
+            <br>
+        </div>
+
+        <div class="booba" id="aboba">
+            <table id="books-table" class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Название ПО</th>
+
+                    <th scope="col">Редактировать</th>
+
+                </tr>
+                </thead>
+
+                <tfoot>
+                <tr>
+                    <th>№</th>
+                    <th>ID</th>
+                    <th>Название ПО</th>
+
+                    <th>Редактировать</th>
+                </tr>
+                <tr>
+                    <th colspan="9" class="ts-pager">
+                        <div class="form-inline">
+                            <div class="btn-group btn-group-sm mx-1" role="group">
+                                <button type="button" class="btn btn-secondary first" title="В начало">⇤
+                                </button>
+                                <button type="button" class="btn btn-secondary prev" title="Прошлая страница">←
+                                </button>
+                            </div>
+                            <span class="pagedisplay"></span>
+                            <div class="btn-group btn-group-sm mx-1" role="group">
+                                <button type="button" class="btn btn-secondary next" title="Следующая страница">
+                                    →
+                                </button>
+                                <button type="button" class="btn btn-secondary last" title="В конец">⇥</button>
+                            </div>
+                            <select class="form-control-sm custom-select px-1 pagesize" title="Кол-во записей">
+                                <option selected="selected" value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="all">Все</option>
+                            </select>
+                            <select class="form-control-sm custom-select px-4 mx-1 pagenum"
+                                    title="Номер страницы"></select>
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+
+                <tbody>
+
+                {% for i in Equip %}
+
+                    <tr class="table-light">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <th>{{ i.pk }}</th>
+                        <td>{{ i.title }}</td>
+
+                        <td>
+                            <button type="button" class="update-book btn btn-sm btn-primary"
+                                    data-form-url="{% url 'update_equipment' i.pk %}">
+                                Редактировать
+                            </button>
+
+                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="btn btn-danger">Удалить
+
+                            </button>
+                            <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить
+                            </button>
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </form>
+
