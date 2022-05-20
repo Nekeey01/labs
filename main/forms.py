@@ -155,6 +155,12 @@ class UpdateZayvkaForm(BSModalModelForm):
         fields = ['reason']
 
 
+class UpdateEquipmentForm(BSModalModelForm):
+    class Meta:
+        model = Equipment
+        fields = ['title']
+
+
 class Media:
     css = {
         'all':('/admin/css/widgets.css',),

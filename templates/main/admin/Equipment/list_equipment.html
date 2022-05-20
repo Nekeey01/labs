@@ -1,0 +1,133 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block cssfiles %}
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css"
+          rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/jquery.tablesorter.pager.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css">
+    <link type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.css" rel="stylesheet"/>
+
+    <style>
+        .tablesorter-pager .btn-group-sm .btn {
+            font-size: 1.2em; /* make pager arrows more visible */
+        }
+
+        .booba {
+            padding: 2%;
+        }
+
+        .paddi {
+            padding: 15px;
+        }
+
+        .table .thead-dark th {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
+
+        .bootstrap_buttons button {
+            margin: 0 0 0 2%;
+        }
+
+        .hid_btn {
+            visibility: hidden;
+            font-size: 0;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    {% include "main/_books_table.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/extras/jquery.tablesorter.pager.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            var asyncSuccessMessage = [
+                "<div style='position:fixed;top:0;z-index:10000;width:100%;border-radius:0;' class='alert alert-icon alert-success alert-dismissible fade show mb-0' role='alert'> Success: Book was updated.<button type='button' class='btn-close' data-bs-dismiss='modal'></button></div><script>$('.alert').fadeTo(2000, 500).slideUp(500, function () {$('.alert').slideUp(500).remove();});<\/script>"
+            ].join();
+
+            function updateBookModalForm() {
+                $(".update-book").each(function () {
+                    $(this).modalForm({
+                        formURL: $(this).data("form-url"),
+                        asyncUpdate: false,
+                        asyncSettings: {
+                            closeOnSubmit: true,
+                            successMessage: asyncSuccessMessage,
+                            dataUrl: "books",
+                            dataElementId: "#books-table",
+                            dataKey: "tables",
+                            addModalFormFunction: updateBookModalForm
+                        }
+                    });
+                });
+            }
+
+            updateBookModalForm();
+
+            $("table").tablesorter({
+                theme: "bootstrap",
+                widthFixed: true,
+                widgets: ["filter",],
+
+                widgetOptions: {
+
+                    columns: ["primary", "secondary", "tertiary"],
+                    {#filter_reset: ".reset",#}
+                    filter_cssFilter: [
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control custom-select', // select needs custom class names :(
+                        'form-control',
+                        'form-control'
+                    ]
+                }
+            })
+                .tablesorterPager({
+                    container: $(".ts-pager"),
+                    cssGoto: ".pagenum",
+                    removeRows: false,
+                    output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+                });
+            $("#del_z").click(function (e) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Вы уверены?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Удалить',
+                    cancelButtonText: `Закрыть`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#del_zz').click(); // открытие окна логина
+                    }
+                })
+            })
+
+        });
+
+    </script>
+
+{% endblock %}

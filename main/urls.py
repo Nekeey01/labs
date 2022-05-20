@@ -26,6 +26,11 @@ urlpatterns = [
     path('create_equipment', CreateEquipment.as_view(), name='create_equipment'),
     path('create_teacher', CreateTeacher.as_view(), name='create_teacher'),
 
+    ########   ADMIN    ############
+    path('update_equipment/<pk>', UpdateEquipment.as_view(), name='update_equipment'),
+    path('list_equipment', ListEquipment.as_view(), name='list_equipment'),
+    path('books', books, name='books'),
+
     #__заявка__#
     path('list_users_zayavka/<pk>', ListUsersZayavka.as_view(), name='list_users_zayavka'),
 
