@@ -44,7 +44,7 @@
                             {% endif %}
                         {% endif %}
 
-                    {% elif request.user|has_group:"Admin" and m.url_name == 'create_cab' or request.user|has_group:"Admin" and m.url_name == 'create_time_interval' or request.user|has_group:"Admin" and m.url_name == 'load_teacher' or request.user|has_group:"Admin" and m.url_name == 'create_equipment' or request.user|has_group:"Admin" and m.url_name == 'create_teacher' %}
+                    {% elif request.user|has_group:"Admin" and m.url_name == 'list_cab' or request.user|has_group:"Admin" and m.url_name == 'list_times' or request.user|has_group:"Admin" and m.url_name == 'list_oborud' or request.user|has_group:"Admin" and m.url_name == 'list_equipment' or request.user|has_group:"Admin" and m.url_name == 'list_teacher' %}
                         {% if m.path == request.path  %}
                             <div class="btn btn-outline-primary">{{ m.title }}</div>
                         {% else %}

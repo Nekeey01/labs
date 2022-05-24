@@ -1,30 +1,31 @@
 from .imports import *
 
-## Создание интервалов времени
-class CreateTimeInterval(BSModalCreateView):
-    form_class = UpdateIntervalForm
-    template_name = 'main/admin/Time_interval/create_time_inteval.html'
-    success_url = reverse_lazy('list_times')
+## Создание пользователя
+class CreateOborud(BSModalCreateView):
+    form_class = UpdateOborudForm
+    template_name = 'main/admin/Oborud/create_oborud.html'
+    success_url = reverse_lazy('list_oborud')
 
-def times(request):
+
+def oborud(request):
     data = dict()
     if request.method == 'GET':
-        books = TimeInterval.objects.all()
+        books = Oborud.objects.all()
         # asyncSettings.dataKey = 'table'
         data['tables'] = render_to_string(
-            'main/admin/Time_interval/_time_table.html',
-            {'Time': books},
+            'main/admin/Oborud/_oborud_table.html',
+            {'Oborud': books},
             request=request
         )
         return JsonResponse(data)
 
 
 ## список_заявок
-class ListTime(DataMixin, ListView):
-    model = TimeInterval
-    template_name = "main/admin/Time_interval/list_times.html"
-    context_object_name = "Time"
-    queryset = TimeInterval.objects.all()
+class ListOborud(DataMixin, ListView):
+    model = Oborud
+    template_name = "main/admin/Oborud/list_oborud.html"
+    context_object_name = "Oborud"
+    queryset = Oborud.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,19 +36,17 @@ class ListTime(DataMixin, ListView):
         for key in request.GET.keys():
             if key.startswith('btn_'):
                 btn_pk = key[4:]
-                record = TimeInterval.objects.get(id=btn_pk)
+                record = Oborud.objects.get(id=btn_pk)
                 record.delete()
-
-        return super(ListTime, self).get(request, *args, **kwargs)
+        return super(ListOborud, self).get(request, *args, **kwargs)
 
 
 ## Создание кабинета
-class UpdateTime(DataMixin, BSModalUpdateView):
-    model = TimeInterval
-    form_class = UpdateIntervalForm
-    template_name = 'main/admin/Time_interval/update_time.html'
-    success_message = 'DDDDDDDDDDD.'
-    success_url = reverse_lazy('list_times')
+class UpdateOborud(DataMixin, BSModalUpdateView):
+    model = Oborud
+    form_class = UpdateOborudForm
+    template_name = 'main/admin/Oborud/update_oborud.html'
+    success_url = reverse_lazy('list_oborud')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,4 +57,3 @@ class UpdateTime(DataMixin, BSModalUpdateView):
         if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
             form.save()
         return super().form_valid(form)
-

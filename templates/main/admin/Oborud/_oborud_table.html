@@ -1,5 +1,5 @@
 
-{#    <form method="get" enctype="multipart/form-data">#}
+    <form method="get" enctype="multipart/form-data">
         <div class="paddi"></div>
         <div class="bootstrap_buttons">
 
@@ -14,7 +14,7 @@
                 <tr>
                     <th scope="col">№</th>
                     <th scope="col">ID</th>
-                    <th scope="col">Название ПО</th>
+                    <th scope="col">Название оборудования</th>
 
                     <th scope="col">Редактировать</th>
 
@@ -25,7 +25,7 @@
                 <tr>
                     <th>№</th>
                     <th>ID</th>
-                    <th>Название ПО</th>
+                    <th>Название оборудования</th>
 
                     <th>Редактировать</th>
                 </tr>
@@ -60,7 +60,7 @@
 
                 <tbody>
 
-                {% for i in Equip %}
+                {% for i in Oborud %}
 
                     <tr class="table-light">
                         <th scope="row">{{ forloop.counter }}</th>
@@ -69,14 +69,14 @@
 
                         <td>
                             <button type="button" class="update-book btn btn-sm btn-primary"
-                                    data-form-url="{% url 'update_equipment' i.pk %}">
+                                    data-form-url="{% url 'update_oborud' i.pk %}">
                                 Редактировать
                             </button>
 
-                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="btn btn-danger">Удалить
+                            <button id="del_z" name="btn_{{ i.pk }}" data-form-url="{{ i.pk }}" type="button" class="del_z btn btn-danger">Удалить
 
                             </button>
-                            <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить
+                            <button id="del_zz{{ i.pk }}" name="btn_{{ i.pk }}"  type="submit" class="hid_btn">Удалить
                             </button>
                         </td>
 

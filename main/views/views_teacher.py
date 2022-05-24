@@ -1,10 +1,11 @@
 from .imports import *
 
+
 ## загрузка учителей
 class LoadTeacher(DataMixin, FormView):
     form_class = LoadTeacherForm
-    template_name = 'main/load_teacher.html'
-    success_url = reverse_lazy('load_teacher')
+    template_name = 'main/admin/Teacher/load_teacher.html'
+    success_url = reverse_lazy('list_teacher')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,35 +59,86 @@ def handle_uploaded_file(f):
             print("АШИБКА В СТРОКЕ ", schet)
 
 
-## Создание кабинета
-class CreateTeacher(DataMixin, CreateView):
-    form_class = CreateTeacherForm
-    template_name = 'main/admin/create_teacher.html'
-    success_url = reverse_lazy('create_teacher')
+## Создание пользователя
+class CreateTeacher(BSModalCreateView):
+    form_class = UpdateTeacherForm
+    template_name = 'main/admin/Teacher/create_teacher.html'
+    success_url = reverse_lazy('list_teacher')
+
+    def form_valid(self, form):
+        if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            middle_name = form.cleaned_data['middle_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            groups = form.cleaned_data['groups']
+
+            user = CustomUser.objects.create_user(email, email, password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.middle_name = middle_name
+            user.save()
+            email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
+                                 f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
+                                 to=[email])
+            # email.send()
+
+            for i in groups:
+                print(i)
+                my_group = Group.objects.get(name=i)
+                my_group.user_set.add(user)
+
+        return HttpResponseRedirect(self.success_url)
+
+
+def teacher(request):
+    data = dict()
+    if request.method == 'GET':
+        books = CustomUser.objects.all()
+        # asyncSettings.dataKey = 'table'
+        data['tables'] = render_to_string(
+            'main/admin/Teacher/_teacher_table.html',
+            {'Teacher': books},
+            request=request
+        )
+        return JsonResponse(data)
+
+
+## список_заявок
+class ListTeacher(DataMixin, ListView):
+    model = CustomUser
+    template_name = "main/admin/Teacher/list_teacher.html"
+    context_object_name = "Teacher"
+    queryset = CustomUser.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Добавить преподавателя")
+        c_def = self.get_user_content(title="Время")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get(self, request, *args, **kwargs):
+        for key in request.GET.keys():
+            if key.startswith('btn_'):
+                btn_pk = key[4:]
+                record = CustomUser.objects.get(id=btn_pk)
+                record.delete()
+        return super(ListTeacher, self).get(request, *args, **kwargs)
+
+
+## Создание кабинета
+class UpdateTeacher(DataMixin, BSModalUpdateView):
+    model = CustomUser
+    form_class = UpdateTeacherForm
+    template_name = 'main/admin/Teacher/update_teacher.html'
+    success_url = reverse_lazy('list_teacher')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_content(title="Укажите причину отклонения заявки")
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form):
-        first_name = form.cleaned_data['first_name']
-        last_name = form.cleaned_data['last_name']
-        middle_name = form.cleaned_data['middle_name']
-        email = form.cleaned_data['email']
-        password = form.cleaned_data['password']
-
-        user = CustomUser.objects.create_user(email, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.middle_name = middle_name
-        user.save()
-        email = EmailMessage(f"Регистрация на платформе бронирования лабораторий",
-                             f"Здравствуйте {first_name} {last_name}\nВаш логин для входа на сайт - {email} \nВаш пароль - {password}",
-                             to=[email])
-        # email.send()
-
-        my_group = Group.objects.get(name='Teacher')
-        my_group.user_set.add(user)
-
-        return HttpResponseRedirect(self.success_url)
+        if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+            form.save()
+        return super().form_valid(form)

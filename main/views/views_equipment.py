@@ -1,25 +1,31 @@
 from .imports import *
 
 
-## Создание ПО
-class CreateEquipment(DataMixin, CreateView):
-    form_class = CreateEquipmentForm
+# ## Создание ПО
+# class CreateEquipment(DataMixin, CreateView):
+#     form_class = CreateEquipmentForm
+#     template_name = 'main/admin/Equipment/create_equipment.html'
+#     success_url = reverse_lazy('create_equipment')
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         c_def = self.get_user_content(title="Добавить ПО")
+#         return dict(list(context.items()) + list(c_def.items()))
+
+class CreateEquipment(BSModalCreateView):
     template_name = 'main/admin/Equipment/create_equipment.html'
-    success_url = reverse_lazy('create_equipment')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Добавить ПО")
-        return dict(list(context.items()) + list(c_def.items()))
+    form_class = UpdateEquipmentForm
+    success_message = 'Success: Book was created.'
+    success_url = reverse_lazy('list_equipment')
 
 
-def books(request):
+def equips(request):
     data = dict()
     if request.method == 'GET':
         books = Equipment.objects.all()
         # asyncSettings.dataKey = 'table'
         data['tables'] = render_to_string(
-            'main/_books_table.html',
+            'main/admin/Equipment/_books_table.html',
             {'Equip': books},
             request=request
         )
@@ -38,6 +44,15 @@ class ListEquipment(DataMixin, ListView):
         c_def = self.get_user_content(title="Список ПО")
         return dict(list(context.items()) + list(c_def.items()))
 
+    def get(self, request, *args, **kwargs):
+        for key in request.GET.keys():
+            if key.startswith('btn_'):
+                btn_pk = key[4:]
+                record = Equipment.objects.get(id=btn_pk)
+                record.delete()
+
+        return super(ListEquipment, self).get(request, *args, **kwargs)
+
 
 ## Создание кабинета
 class UpdateEquipment(DataMixin, BSModalUpdateView):
@@ -52,9 +67,9 @@ class UpdateEquipment(DataMixin, BSModalUpdateView):
         c_def = self.get_user_content(title="Укажите причину отклонения заявки")
         return dict(list(context.items()) + list(c_def.items()))
 
-    def form_valid(self, form):
-        if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
-            form.save()
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+    #         form.save()
+    #     return super().form_valid(form)
 
 

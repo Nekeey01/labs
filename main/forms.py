@@ -1,14 +1,10 @@
+from bootstrap_modal_forms.forms import BSModalModelForm
 from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
-
+from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
-from django.db.models import Q
+from django.forms import ModelForm
 
 from .models import *
-from django.forms import ModelForm, TextInput, Textarea, ChoiceField, MultipleChoiceField, CheckboxSelectMultiple, \
-    Select, SelectMultiple
-from django import forms
-from bootstrap_modal_forms.forms import BSModalModelForm
 
 
 ## форма создания юзера
@@ -29,21 +25,22 @@ class LoginUserForm(AuthenticationForm):
 
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-## форма создания Кабинета
-class CreateCabForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(CreateCabForm, self).__init__(*args, **kwargs)
-        self.fields['number'].widget.attrs['class'] = 'form-control'
-        self.fields['time_id'].label = "Выберите интервалы времени"
-        self.fields['equip_id'].label = "Выберите ПО"
 
-    equip_id = forms.ModelMultipleChoiceField(queryset=Equipment.objects.all(), required=True,
-                                              widget=FilteredSelectMultiple("Proveedor", is_stacked=False))
-
-    class Meta:
-        model = Cabinet
-        fields = ["number", "time_id", "equip_id"]
+# ## форма создания Кабинета
+# class CreateCabForm(ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request', None)
+#         super(CreateCabForm, self).__init__(*args, **kwargs)
+#         self.fields['number'].widget.attrs['class'] = 'form-control'
+#         self.fields['time_id'].label = "Выберите интервалы времени"
+#         self.fields['equip_id'].label = "Выберите ПО"
+#
+#     equip_id = forms.ModelMultipleChoiceField(queryset=Equipment.objects.all(), required=True,
+#                                               widget=FilteredSelectMultiple("Proveedor", is_stacked=False))
+#
+#     class Meta:
+#         model = Cabinet
+#         fields = ["number", "time_id", "equip_id"]
 
     # # валидатор
     # def clean_number(self):
@@ -53,7 +50,6 @@ class CreateCabForm(ModelForm):
     #     return number
 
 
-
 class Reserv_Cab_Form(ModelForm):
     # reserv_time = forms.ModelChoiceField(queryset=None, to_field_name="number", empty_label="booba", required=False)
     # reserv_time = forms.ChoiceField(choices=(('1', '2'),))
@@ -61,7 +57,8 @@ class Reserv_Cab_Form(ModelForm):
         self.request = kwargs.pop('request', None)
         super(Reserv_Cab_Form, self).__init__(*args, **kwargs)
         # print("cab_id - ", cab_id)
-        print("BOOOBA - ", Cabinet.objects.filter(number=cab_id).values_list("time_id__time", flat=True)) #<QuerySet ['10:00-12:00', '12:00-14:00', '8:00-10:00']>
+        print("BOOOBA - ", Cabinet.objects.filter(number=cab_id).values_list("time_id__time",
+                                                                             flat=True))  # <QuerySet ['10:00-12:00', '12:00-14:00', '8:00-10:00']>
         self.cab_id = cab_id
         # self.fields['reserv_time'].choices = [(i, str(i)) for i in Cabinet.objects.filter(number=cab_id).values_list("time_id__time", flat=True)]
 
@@ -91,17 +88,92 @@ class Reserv_Cab_Form(ModelForm):
 
 import re
 
-## форма создания интервала времени
-class CreateTimeIntervalForm(ModelForm):
+#
+# ## форма создания интервала времени
+# class CreateTimeIntervalForm(ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request', None)
+#         super(CreateTimeIntervalForm, self).__init__(*args, **kwargs)
+#         self.fields['time'].widget.attrs['class'] = 'form-control'
+#
+#     class Meta:
+#         model = TimeInterval
+#         fields = ["time"]
+#
+#     def clean_time(self):
+#         number = self.cleaned_data['time']
+#         tpl = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]-([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+#         print(number)
+#         if re.match(tpl, number) is not None:
+#             return number
+#         else:
+#             # if Cabinet.objects.filter(number=number).exists():
+#             raise forms.ValidationError("Формат времени обязан быть XX:XX-XX:XX")
+#         # return number
+#
+#
+# ## форма создания ПК
+# class CreateEquipmentForm(ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request', None)
+#         super(CreateEquipmentForm, self).__init__(*args, **kwargs)
+#         self.fields['title'].widget.attrs['class'] = 'form-control'
+#
+#     class Meta:
+#         model = Equipment
+#         fields = ["title"]
+
+
+class LoadTeacherForm(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput())
+
+#
+# class CreateTeacherForm(ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         self.request = kwargs.pop('request', None)
+#         super(CreateTeacherForm, self).__init__(*args, **kwargs)
+#         self.fields['last_name'].widget.attrs['class'] = 'form-control'
+#         self.fields['last_name'].label = 'Фамилия'
+#
+#         self.fields['first_name'].widget.attrs['class'] = 'form-control'
+#         self.fields['first_name'].label = 'Имя'
+#         self.fields['middle_name'].widget.attrs['class'] = 'form-control'
+#         self.fields['email'].widget.attrs['class'] = 'form-control'
+#         self.fields['password'].widget.attrs['class'] = 'form-control'
+#
+#     class Meta:
+#         model = CustomUser
+#         fields = ["last_name", "first_name", "middle_name", "email", "password"]
+
+class ClassStyleForm(BSModalModelForm):
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(CreateTimeIntervalForm, self).__init__(*args, **kwargs)
-        self.fields['time'].widget.attrs['class'] = 'form-control'
+        super(ClassStyleForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 
+class UpdateZayvkaForm(ClassStyleForm):
+    class Meta:
+        model = Zayavka
+        fields = ['reason']
+
+
+class UpdateEquipmentForm(ClassStyleForm):
+    class Meta:
+        model = Equipment
+        fields = ['title']
+
+
+class UpdateOborudForm(ClassStyleForm):
+    class Meta:
+        model = Oborud
+        fields = ['title']
+
+
+class UpdateIntervalForm(ClassStyleForm):
     class Meta:
         model = TimeInterval
-        fields = ["time"]
+        fields = ['time']
 
     def clean_time(self):
         number = self.cleaned_data['time']
@@ -110,60 +182,27 @@ class CreateTimeIntervalForm(ModelForm):
         if re.match(tpl, number) is not None:
             return number
         else:
-        # if Cabinet.objects.filter(number=number).exists():
+            # if Cabinet.objects.filter(number=number).exists():
             raise forms.ValidationError("Формат времени обязан быть XX:XX-XX:XX")
-        # return number
 
 
-## форма создания ПК
-class CreateEquipmentForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(CreateEquipmentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs['class'] = 'form-control'
-
+class UpdateCabForm(ClassStyleForm):
     class Meta:
-        model = Equipment
-        fields = ["title"]
+        model = Cabinet
+        fields = ["number", "time_id", "equip_id", "oborud_id"]
 
 
-class LoadTeacherForm(forms.Form):
-    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
-
-class CreateTeacherForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(CreateTeacherForm, self).__init__(*args, **kwargs)
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].label = 'Фамилия'
-
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].label = 'Имя'
-        self.fields['middle_name'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['password'].widget.attrs['class'] = 'form-control'
-
+class UpdateTeacherForm(BSModalModelForm):
     class Meta:
         model = CustomUser
-        fields = ["last_name", "first_name", "middle_name", "email", "password"]
+        fields = ["last_name", "first_name", "middle_name", "email", "password", "groups"]
 
-
-class UpdateZayvkaForm(BSModalModelForm):
-    class Meta:
-        model = Zayavka
-        fields = ['reason']
-
-
-class UpdateEquipmentForm(BSModalModelForm):
-    class Meta:
-        model = Equipment
-        fields = ['title']
 
 
 class Media:
     css = {
-        'all':('/admin/css/widgets.css',),
+        'all': ('/admin/css/widgets.css',),
     }
     # jsi18n is required by the widget
     js = ('/admin/jsi18n/',)
