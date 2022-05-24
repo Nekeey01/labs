@@ -1,16 +1,81 @@
+
+
 from .imports import *
 
 
-## Создание кабинета
-class CreateCab(DataMixin, CreateView):
-    form_class = CreateCabForm
-    template_name = 'main/admin/create_cab.html'
-    success_url = reverse_lazy('create_cab')
+# ## Создание кабинета
+# class CreateCab(DataMixin, CreateView):
+#     form_class = CreateCabForm
+#     template_name = 'main/admin/Cabinet/create_cab.html'
+#     success_url = reverse_lazy('create_cab')
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         c_def = self.get_user_content(title="Добавить лабораторию")
+#         return dict(list(context.items()) + list(c_def.items()))
+
+
+## Создание интервалов времени
+class CreateCab(BSModalCreateView):
+    form_class = UpdateCabForm
+    template_name = 'main/admin/Cabinet/create_cab.html'
+    success_url = reverse_lazy('list_cab')
+
+def cab(request):
+    data = dict()
+    if request.method == 'GET':
+        books = Cabinet.objects.all()
+        # asyncSettings.dataKey = 'table'
+        data['tables'] = render_to_string(
+            'main/admin/Cabinet/_cab_table.html',
+            {'Cab': books},
+            request=request
+        )
+        return JsonResponse(data)
+
+
+## список_заявок
+class ListCabs(DataMixin, ListView):
+    model = Cabinet
+    template_name = "main/admin/Cabinet/list_cab.html"
+    context_object_name = "Cab"
+    queryset = Cabinet.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Добавить лабораторию")
+        c_def = self.get_user_content(title="Время")
         return dict(list(context.items()) + list(c_def.items()))
+
+    def get(self, request, *args, **kwargs):
+        for key in request.GET.keys():
+            if key.startswith('btn_'):
+                btn_pk = key[4:]
+                record = Cabinet.objects.get(id=btn_pk)
+                record.delete()
+
+        return super(ListCabs, self).get(request, *args, **kwargs)
+
+
+## Обновление кабинета
+class UpdateCabs(DataMixin, BSModalUpdateView):
+    model = Cabinet
+    form_class = UpdateCabForm
+    template_name = 'main/admin/Cabinet/update_cab.html'
+    success_message = 'DDDDDDDDDDD.'
+    success_url = reverse_lazy('list_cab')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_content(title="Укажите причину отклонения заявки")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):
+        if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
+            form.save()
+        return super().form_valid(form)
+
+
+
 
 
 
@@ -79,7 +144,7 @@ class SomeAPI(APIView):
                 print("O - ", o)
 
                 print("free_pc_and_o - ", free_pc_and_o)
-                g = free_cab.difference(free_pc_and_o)  ## убираем лишнее
+                g = free_cab.difference(free_pc_and_o).order_by("number")  ## убираем лишнее
 
             elif time_start == "Любое время":
                 g = free_cab
@@ -94,7 +159,7 @@ class SomeAPI(APIView):
                 g = free_cab.difference(free_pc_and_o).order_by("number")  ## убираем лишнее
 
             elif check_time:
-                o = Cabinet.objects.filter(Q(time_id__time=time_start)).distinct()
+                o = Cabinet.objects.filter(Q(time_id__time=time_start)).distinct().order_by("number")
                 print("O", o)
                 # request.session['reserv_times'] = d_s  ## устанавливаем дату в сессию
                 # request.session['reserv_time_inteval'] = time_start  ## устанавливаем время в сессию
@@ -129,7 +194,8 @@ def return_cab_with_equ(query):
         if st.strip() == '':
             continue
         q |= Q(equip_id__title__icontains=st.strip())
-    return Cabinet.objects.filter(q)
+        q |= Q(oborud_id__title__icontains=st.strip())
+    return Cabinet.objects.filter(q).distinct()
 
 
 ## резервация пк обычным пользователем

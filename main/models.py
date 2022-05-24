@@ -36,11 +36,24 @@ class Equipment(models.Model):
         return f"{self.title}"
 
 
+## таблица ПО
+class Oborud(models.Model):
+    title = models.CharField('Название оборудования', max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = 'Название оборудования'
+        verbose_name_plural = "Название оборудования"
+
+    def __str__(self):
+        return f"{self.title}"
+
+
 ## таблица Кабинета
 class Cabinet(models.Model):
-    number = models.PositiveSmallIntegerField('Номер пк', unique=True)
+    number = models.PositiveSmallIntegerField('Номер лаборатории', unique=True)
     time_id = models.ManyToManyField(TimeInterval, related_name='time_id')
     equip_id = models.ManyToManyField(Equipment, related_name='equip_id')
+    oborud_id = models.ManyToManyField(Oborud, related_name='oborud_id')
 
     class Meta:
         verbose_name = 'Кабинет'
@@ -61,9 +74,9 @@ class Zayavka(models.Model):
     reserv_time = models.CharField('Время', max_length=50, null=True, blank=True)
 
     ## привязка пк
-    zayavka_cab = models.ForeignKey(Cabinet, on_delete=models.PROTECT)
+    zayavka_cab = models.ForeignKey(Cabinet, on_delete=models.CASCADE)
 
-    zayavka_user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='zayavka_user_id')
+    zayavka_user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='zayavka_user_id')
 
     status = models.CharField('Статус', max_length=50, null=True, blank=True)
     reason = models.CharField('Причина отказа', max_length=250, null=True, blank=True, default="")
@@ -82,9 +95,9 @@ class Reserved_Cabinet(models.Model):
     reserv_time = models.CharField('Время', max_length=50, null=True, blank=True)
 
     ## привязка пк
-    cab = models.ForeignKey(Cabinet, on_delete=models.PROTECT)
+    cab = models.ForeignKey(Cabinet, on_delete=models.CASCADE)
 
-    user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='user_id')
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_id')
 
     # zayavka = models.ForeignKey(Zayavka, on_delete=models.PROTECT)
 

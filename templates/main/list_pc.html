@@ -20,7 +20,7 @@
                                     <li class="list-group-item list-group-item-white border-3 border-dark btn-danger rounded-pill"
                                         style="background-color:#ffc107 !important;">
                                         <a
-                                           class="text-decoration-none link-dark text-black">{{ time_interval.time }}</a>
+                                                class="text-decoration-none link-dark text-black">{{ time_interval.time }}</a>
                                     </li>
                                 {% endfor %}
                             </div>
@@ -35,11 +35,30 @@
                                 {% for equip in p.equip_id.all %}
                                     <li class="list-group-item list-group-item-white border-3 border-dark btn-danger rounded-pill"
                                         style="background-color:#ffc107 !important;">
-                                        <a
-                                           class="text-decoration-none link-dark text-black">{{ equip.title }}</a>
+                                        <a class="text-decoration-none link-dark text-black">{{ equip.title }}</a>
                                     </li>
                                 {% endfor %}
                             </div>
+
+
+                            {% if p.oborud_id.all.0 != None %}
+                                <li class="list-group-item bg-dark border-0 border-dark">
+                                    <a class="btn btn-primary" data-bs-toggle="collapse"
+                                       href="#oborud_collapse{{ p.pk }}"
+                                       role="button" aria-expanded="false" aria-controls="oborud_collapse{{ p.pk }}">
+                                        Оборудование
+                                    </a>
+                                </li>
+                                <div class="collapse" id="oborud_collapse{{ p.pk }}">
+                                    {% for oborud in p.oborud_id.all %}
+                                        <li class="list-group-item list-group-item-white border-3 border-dark btn-danger rounded-pill"
+                                            style="background-color:#ffc107 !important;">
+                                            <a
+                                                    class="text-decoration-none link-dark text-black">{{ oborud.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </ul>
 
                         <div class="card-footer bg-transparent ">

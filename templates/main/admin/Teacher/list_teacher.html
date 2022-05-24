@@ -45,9 +45,11 @@
 {% endblock %}
 {% block content %}
 
-    <button id="create-book" class="btn btn-primary" type="button" name="button">Create book</button>
+    <button id="create-book" class="btn btn-primary" type="button" name="button">Добавить преподавателя</button>
 
-    {% include "main/admin/Equipment/_books_table.html" %}
+    <button id="load-teacher" class="btn btn-primary" type="button" name="button">Загрузить список преподавателей</button>
+
+    {% include "main/admin/Teacher/_teacher_table.html" %}
 
 {% endblock %}
 
@@ -62,7 +64,11 @@
         $(function () {
 
             $("#create-book").modalForm({
-                formURL: "{% url 'create_equipment' %}"
+                formURL: "{% url 'create_teacher' %}"
+            });
+
+            $("#load-teacher").modalForm({
+                formURL: "{% url 'load_teacher' %}"
             });
 
             var asyncSuccessMessage = [
@@ -77,7 +83,7 @@
                         asyncSettings: {
                             closeOnSubmit: true,
                             successMessage: asyncSuccessMessage,
-                            dataUrl: "equips",
+                            dataUrl: "books",
                             dataElementId: "#books-table",
                             dataKey: "tables",
                             addModalFormFunction: updateBookModalForm
