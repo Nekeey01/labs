@@ -55,6 +55,7 @@ urlpatterns = [
 
     #__заявка__#
     path('list_users_zayavka/<pk>', ListUsersZayavka.as_view(), name='list_users_zayavka'),
+    path('reserved_cab', ListResCab.as_view(), name='reserved_cab'),
 
     path('list_zayvka_from_ucheb', ShowZayvkaFromUcheb.as_view(), name='list_zayvka_from_ucheb'),
     path('journal_zayavok', ShowJournal.as_view(), name='journal_zayavok'),

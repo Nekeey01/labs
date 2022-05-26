@@ -1,6 +1,7 @@
 from .imports import *
 
-#писок заявок
+
+# писок заявок
 class ShowZayvkaFromUcheb(DataMixin, ListView):
     model = Zayavka
     template_name = "main/ucheb/list_zayvka_from_ucheb.html"
@@ -30,7 +31,7 @@ class ShowZayvkaFromUcheb(DataMixin, ListView):
         return super(ShowZayvkaFromUcheb, self).get(request, *args, **kwargs)
 
 
-#журнал всех заявок
+# журнал всех заявок
 class ShowJournal(DataMixin, ListView):
     model = Zayavka
     template_name = "main/ucheb/journal.html"
@@ -72,6 +73,7 @@ class UpdateZayvkaFromUcheb(DataMixin, BSModalUpdateView):
         response = super().form_valid(form)
         return response
 
+import datetime
 
 ## Аналитика
 class Analitics(DataMixin, TemplateView):
@@ -79,10 +81,32 @@ class Analitics(DataMixin, TemplateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        today = datetime.date.today()
         c_def = self.get_user_content(title="Аналитика",
-                                      qs=Reserved_Cabinet.objects.all().values_list('reserv_date', flat=True).distinct().order_by('reserv_date'),
-                                      qs2=Reserved_Cabinet.objects.values('reserv_date').annotate(count_reslabs=Count('reserv_date')).order_by('reserv_date'),
+                                      all_time_label=Reserved_Cabinet.objects.all().values_list('reserv_date',
+                                                                                                flat=True).distinct().order_by(
+                                          'reserv_date'),
+                                      all_time_data=Reserved_Cabinet.objects.values('reserv_date').annotate(
+                                          count_reslabs=Count('reserv_date')).order_by('reserv_date'),
 
-                                      qss=Zayavka.objects.all().values_list('status', flat=True).distinct().order_by("status"),
-                                      qss2=Zayavka.objects.values('status').annotate(count_zayavok=Count('status')).order_by("status"))
+                                      years_label=Reserved_Cabinet.objects.filter(
+                                          reserv_date__year=today.year).values_list('reserv_date',
+                                                                                    flat=True).distinct().order_by(
+                                          'reserv_date'),
+                                      years_data=Reserved_Cabinet.objects.filter(reserv_date__year=today.year).values(
+                                          'reserv_date').annotate(count_reslabs=Count('reserv_date')).order_by(
+                                          'reserv_date'),
+
+                                      month_label=Reserved_Cabinet.objects.filter(reserv_date__year=today.year,
+                                                                                  reserv_date__month=today.month).values_list(
+                                          'reserv_date', flat=True).distinct().order_by('reserv_date'),
+                                      month_data=Reserved_Cabinet.objects.filter(reserv_date__year=today.year,
+                                                                                 reserv_date__month=today.month).values(
+                                          'reserv_date').annotate(count_reslabs=Count('reserv_date')).order_by(
+                                          'reserv_date'),
+
+                                      qss=Zayavka.objects.all().values_list('status', flat=True).distinct().order_by(
+                                          "status"),
+                                      qss2=Zayavka.objects.values('status').annotate(
+                                          count_zayavok=Count('status')).order_by("status"))
         return dict(list(context.items()) + list(c_def.items()))

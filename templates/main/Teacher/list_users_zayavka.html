@@ -140,11 +140,10 @@
 
                         <td>{{ i.status }}</td>
                         <td>
-                            <button id="del_z" name="btn_{{ i.pk }}" type="button" class="bb tn btn-danger">Удалить
-                                заявку
-                            </button>
-                            <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить заявку
-                            </button>
+
+                            <button id="del_z" name="btn_{{ i.pk }}" data-form-url="{{ i.pk }}" type="button"
+                                    class="bb btn btn-danger">Отменить заявку</button>
+                            <button id="del_zz{{ i.pk }}" name="btn_{{ i.pk }}" type="submit" class="hid_btn"></button>
                         </td>
 
                         </tr>
@@ -299,7 +298,7 @@
                     cancelButtonText: `Закрыть`,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#del_zz').click(); // открытие окна логина
+                        $('#del_zz' + $(this).data("form-url")).click();
                     }
                 })
             })

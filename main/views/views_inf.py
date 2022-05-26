@@ -38,16 +38,6 @@ class UpdateZayvkaFromInf(DataMixin, BSModalUpdateView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def form_valid(self, form):
-        title = form.cleaned_data['title']
-        for i in Soft.objects.all():
-            if title == i.title:
-                i.count += form.cleaned_data["count"]
-                i.save()
-                return HttpResponseRedirect(self.success_url)
-        form.save()
-        return HttpResponseRedirect(self.success_url)
-
-
         form.instance.status = "Отклонена"
         form.save()
         response = super().form_valid(form)

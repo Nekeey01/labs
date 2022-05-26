@@ -14,73 +14,209 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="card mt-4">
-        <div class="card-header">
-            <i class="fas fa-chart-area me-1 text-center"></i>
-            Количество заказанных лабораторий в день
+    <ul class="nav nav-tabs nav-pills nav-fill" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="month-tab" data-bs-toggle="tab" data-bs-target="#month"
+               type="button" role="tab" aria-controls="month" aria-selected="true">Месяц</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="year-tab" data-bs-toggle="tab" data-bs-target="#year"
+               type="button" role="tab" aria-controls="year" aria-selected="false">Год</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all"
+               type="button" role="tab" aria-controls="all" aria-selected="false">Все время</a>
+        </li>
+    </ul>
+    <div class="container">
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="month" role="tabpanel" aria-labelledby="month-tab">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1 text-center"></i>
+                        Количество заказанных лабораторий в текущем месяце
+                    </div>
+                    <div class="card-body">
+                        <canvas id="lab_month" width="100%" height="30"></canvas>
+                    </div>
+                    <script>
+
+                    </script>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="year" role="tabpanel" aria-labelledby="year-tab">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1 text-center"></i>
+                        Количество заказанных лабораторий в текущем году
+                    </div>
+                    <div class="card-body">
+                        <canvas id="lab_year" width="100%" height="30"></canvas>
+                    </div>
+                    <script>
+
+                    </script>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1 text-center"></i>
+                        Количество заказанных лабораторий за все время
+                    </div>
+                    <div class="card-body">
+                        <canvas id="lab_all" width="100%" height="30"></canvas>
+                    </div>
+                    <script>
+
+                    </script>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <canvas id="rasxodChart" width="100%" height="30"></canvas></div>
-            <script>
-                const ctx = document.getElementById('rasxodChart').getContext('2d');
-                const rasxodChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [{%for data in qs%} '{{ data|date:'d E Y года' }}', {%endfor%}],
-                        datasets: [{
-                            label: 'Заказы',
-                            data: [{%for data in qs2%} '{{ data.count_reslabs }}', {%endfor%}],
-                            lineTension: 0.3,
-                            backgroundColor: "rgba(2,117,216,0.2)",
-                            borderColor: "rgba(2,117,216,1)",
-                            pointRadius: 5,
-                            fill: false,
-                            pointBackgroundColor: "rgba(2,117,216,1)",
-                            pointBorderColor: "rgba(255,255,255,0.8)",
-                            pointHoverRadius: 5,
-                            pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                            pointHitRadius: 50,
-                            pointBorderWidth: 2,
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        },
-                        legend: {
-                          display: false
-                        }
-                    }
-                });
-            </script>
-    </div>
-    <hr>
-    <div class="card mt-4">
-        <div class="card-header">
-            <i class="fas fa-chart-area me-1 text-center"></i>
-            Анализ количества определенных заявок
-        </div>
-        <div class="card-body">
-            <canvas id="poChart" width="100%" height="40"></canvas></div>
+
+
+        <hr>
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1 text-center"></i>
+                Анализ количества определенных заявок
+            </div>
+            <div class="card-body">
+                <canvas id="poChart" width="100%" height="40"></canvas>
+            </div>
             <script>
                 const ctx2 = document.getElementById('poChart').getContext('2d');
                 var myPieChart = new Chart(ctx2, {
-                          type: 'doughnut',
-                          data: {
-                            labels: [{%for data in qss%} '{{ data }}', {%endfor%}],
-                            datasets: [{
-                              data: [{%for data in qss2%} '{{ data.count_zayavok }}', {%endfor%}],
-                              backgroundColor: ['#ffc107', '#28a745',  '#c6b065','#dc3545',
-                                  '#d57a81' ],
-                            }],
-                          },
-                        });
+                    type: 'doughnut',
+                    data: {
+                        labels: [{%for data in qss%} '{{ data }}', {%endfor%}],
+                        datasets: [{
+                            data: [{%for data in qss2%} '{{ data.count_zayavok }}', {%endfor%}],
+                            backgroundColor: ['#ffc107', '#28a745', '#c6b065', '#dc3545',
+                                '#d57a81'],
+                        }],
+                    },
+                });
             </script>
-    </div>
-    <hr>
+        </div>
+        <hr>
 
-</div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            {# График по месяцу #}
+            const lab_month = document.getElementById('lab_month').getContext('2d');
+            const lab_month_chart = new Chart(lab_month, {
+                type: 'line',
+                data: {
+                    labels: [{%for data in month_label%} '{{ data|date:'d E Y года' }}', {%endfor%}],
+                    datasets: [{
+                        label: 'Заказы',
+                        data: [{%for data in month_data%} '{{ data.count_reslabs }}', {%endfor%}],
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        fill: false,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+
+            {# График по году #}
+            const lab_year = document.getElementById('lab_year').getContext('2d');
+            const lab_year_chart = new Chart(lab_year, {
+                type: 'line',
+                data: {
+                    labels: [{%for data in years_label%} '{{ data|date:'d E Y года' }}', {%endfor%}],
+                    datasets: [{
+                        label: 'Заказы',
+                        data: [{%for data in years_data%} '{{ data.count_reslabs }}', {%endfor%}],
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        fill: false,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+
+            {# График по всему времени #}
+            const lab_all = document.getElementById('lab_all').getContext('2d');
+            const lab_all_chart = new Chart(lab_all, {
+                type: 'line',
+                data: {
+                    labels: [{%for data in all_time_label%} '{{ data|date:'d E Y года' }}', {%endfor%}],
+                    datasets: [{
+                        label: 'Заказы',
+                        data: [{%for data in all_time_data%} '{{ data.count_reslabs }}', {%endfor%}],
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        fill: false,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+
+
+        });
+
+    </script>
+
+
 {% endblock %}

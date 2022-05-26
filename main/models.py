@@ -5,6 +5,9 @@ from django.urls import reverse
 
 ## измененная таблица юзера, использующая дефолтный класс
 class CustomUser(AbstractUser):
+    email = models.EmailField("Почта", unique=True, blank=False)
+    first_name = models.CharField("Имя", max_length=250, blank=False)
+    last_name = models.CharField("Фамилия", max_length=250, blank=False)
     avatar = models.ImageField('Аватар', upload_to='avatar/%Y/%m/%d/', default='avatar/default/kot.png')
     middle_name = models.CharField('Отчество', max_length=250, blank=True, null=True)
 

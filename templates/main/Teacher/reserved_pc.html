@@ -60,12 +60,12 @@
                 <thead class="thead-dark">
                 <tr>
                     <th class="text-center" scope="col">№</th>
-                    <th class="text-center" scope="col">ФИО</th>
                     <th class="text-center" scope="col">Номер лаборатории</th>
                     <th class="text-center" scope="col">Дата</th>
                     <th class="text-center" scope="col">Время</th>
-                    <th class="text-center" scope="col">Дата посутпления заявки</th>
-                    <th class="text-center" scope="col">Обработать заявку</th>
+                    <th class="text-center" scope="col">Оборудование</th>
+                    <th class="text-center" scope="col">ПО</th>
+                    <th class="text-center" scope="col">Удалить резервацию</th>
 
                 </tr>
                 </thead>
@@ -73,15 +73,15 @@
                 <tfoot>
                 <tr>
                     <th class="text-center" scope="col">№</th>
-                    <th class="text-center" scope="col">ФИО</th>
                     <th class="text-center" scope="col">Номер лаборатории</th>
                     <th class="text-center" scope="col">Дата</th>
                     <th class="text-center" scope="col">Время</th>
-                    <th class="text-center" scope="col">Дата посутпления заявки</th>
-                    <th class="text-center" scope="col">Обработать заявку</th>
+                    <th class="text-center" scope="col">Оборудование</th>
+                    <th class="text-center" scope="col">ПО</th>
+                    <th class="text-center" scope="col">Удалить резервацию</th>
                 </tr>
                 <tr>
-                    <th colspan="10" class="ts-pager">
+                    <th colspan="8" class="ts-pager">
                         <div class="form-inline">
                             <div class="btn-group btn-group-sm mx-1" role="group">
                                 <button type="button" class="btn btn-secondary first" title="В начало">⇤
@@ -108,22 +108,24 @@
                     </th>
                 </tr>
                 </tfoot>
-                    <tbody>
-                {% for i in Zayavka %}
+                <tbody>
+                {% for i in Res_lab %}
 
                     <tr>
                         <th class="text-center" scope="row">{{ forloop.counter }}</th>
-                        <td class="text-center">{{ i.zayavka_user_id.last_name }} {{ i.zayavka_user_id.first_name }}</td>
-                        <td class="text-center">{{ i.zayavka_cab.number }}</td>
+                        <td class="text-center">{{ i.cab.number }}</td>
                         <td class="text-center">{{ i.reserv_date }}</td>
-                        <td class="text-center">{{ i.reserv_time }}</td>
-                        <td class="text-center">{{ i.date_zayavka }}</td>
+                        <td class="text-center">{% for j in i.cab.time_id.all %} {{ j }}, {% endfor %}</td>
+                        <td class="text-center">{% for j in i.cab.oborud_id.all %} {{ j }}, {% endfor %}</td>
+                        <td class="text-center">{% for j in i.cab.equip_id.all %} {{ j }}, {% endfor %}</td>
                         <td class="text-center">
-                            <button name="btn_{{ i.pk }}" type="submit" class="btn btn-success">Одобрить</button>
+                            <button id="del_z" name="btn_{{ i.pk }}" data-form-url="{{ i.pk }}" type="button"
+                                    class="del_z btn btn-danger">Удалить
 
-                            <button id="obrabotka_modal" data-form-url="{% url 'update_zayvka_from_ucheb' i.pk %}"
-                               type="button"
-                               name="obrbotka" class="update-zayavka btn btn-danger">Отклонить заявку</button>
+                            </button>
+                            <button id="del_zz{{ i.pk }}" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить
+                            </button>
+
                         </td>
 
                     </tr>
@@ -146,10 +148,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".update-zayavka").each(function () {
-                $(this).modalForm({formURL: $(this).data("form-url")});
-            });
-
 
             $("table").tablesorter({
                 theme: "bootstrap",
@@ -169,9 +167,6 @@
                         'form-control',
                         'form-control',
                         'form-control',
-                        'form-control',
-                        'form-control',
-                        'form-control',
                     ]
                 }
             })
@@ -182,6 +177,21 @@
                     output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
 
                 });
+
+            $(".del_z").click(function (e) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Вы уверены?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Удалить',
+                    cancelButtonText: `Закрыть`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#del_zz' + $(this).data("form-url")).click();
+                        console.log('#del_zz' + $(this).data("form-url"))
+                    }
+                })
+            })
 
         });
 
