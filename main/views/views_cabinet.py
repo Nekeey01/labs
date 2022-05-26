@@ -1,19 +1,4 @@
-
-
 from .imports import *
-
-
-# ## Создание кабинета
-# class CreateCab(DataMixin, CreateView):
-#     form_class = CreateCabForm
-#     template_name = 'main/admin/Cabinet/create_cab.html'
-#     success_url = reverse_lazy('create_cab')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_content(title="Добавить лабораторию")
-#         return dict(list(context.items()) + list(c_def.items()))
-
 
 ## Создание интервалов времени
 class CreateCab(BSModalCreateView):
@@ -61,7 +46,6 @@ class UpdateCabs(DataMixin, BSModalUpdateView):
     model = Cabinet
     form_class = UpdateCabForm
     template_name = 'main/admin/Cabinet/update_cab.html'
-    success_message = 'DDDDDDDDDDD.'
     success_url = reverse_lazy('list_cab')
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -73,9 +57,6 @@ class UpdateCabs(DataMixin, BSModalUpdateView):
         if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
             form.save()
         return super().form_valid(form)
-
-
-
 
 
 
@@ -144,7 +125,7 @@ class SomeAPI(APIView):
                 print("O - ", o)
 
                 print("free_pc_and_o - ", free_pc_and_o)
-                g = free_cab.difference(free_pc_and_o).order_by("number")  ## убираем лишнее
+                g = free_cab.difference(free_pc_and_o) ## убираем лишнее
 
             elif time_start == "Любое время":
                 g = free_cab

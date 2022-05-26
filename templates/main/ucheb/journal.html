@@ -63,8 +63,8 @@
                     <th scope="col">ID</th>
                     <th scope="col">Номер лабы</th>
                     <th scope="col">Дата подачи заявки</th>
-                    <th scope="col">Дата резервации лаборатории</th>
-                    <th scope="col">Время резервации лаборатории</th>
+                    <th scope="col">Дата заказа лаборатории</th>
+                    <th scope="col">Время заказа лаборатории</th>
 
                     <th scope="col" class="filter-select filter-exact" data-placeholder="Все">Статус</th>
                     <th scope="col">Причина отказа</th>
@@ -140,11 +140,10 @@
                 <td>{{ i.reason }}</td>
 
                 <td>
-                    <button id="del_z" name="btn_{{ i.pk }}" type="button" class="btn btn-danger">Удалить
-                        заявку
+                    <button id="del_z" name="btn_{{ i.pk }}" data-form-url="{{ i.pk }}" type="button"
+                            class="bb btn btn-danger">Удалить
                     </button>
-                    <button id="del_zz" name="btn_{{ i.pk }}" type="submit" class="hid_btn">Удалить заявку
-                    </button>
+                    <button id="del_zz{{ i.pk }}" name="btn_{{ i.pk }}" type="submit" class="hid_btn"></button>
                 </td>
 
                 </tr>
@@ -196,7 +195,7 @@
                     output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
 
                 });
-            $("#del_z").click(function (e) {
+            $(".bb").click(function (e) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Вы уверены?',
@@ -205,7 +204,8 @@
                     cancelButtonText: `Закрыть`,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#del_zz').click(); // открытие окна логина
+                        $('#del_zz' + $(this).data("form-url")).click();
+
                     }
                 })
             })

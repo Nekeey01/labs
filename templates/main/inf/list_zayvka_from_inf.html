@@ -1,61 +1,202 @@
 {% extends 'main/base.html' %}
+
 {% block title %}
     {{ title }}
 {% endblock %}
+
+{% block cssfiles %}
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css"
+          rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/jquery.tablesorter.pager.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css">
+    <link type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.css" rel="stylesheet"/>
+
+    <style>
+        .tablesorter-pager .btn-group-sm .btn {
+            font-size: 1.2em; /* make pager arrows more visible */
+        }
+
+        .booba {
+            padding: 2%;
+        }
+
+        .paddi {
+            padding: 15px;
+        }
+
+        .table .thead-dark th {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
+
+        .bootstrap_buttons button {
+            margin: 0 0 0 2%;
+        }
+
+        .hid_btn {
+            visibility: hidden;
+            font-size: 0;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 
     <form method="get" enctype="multipart/form-data">
+        <div class="paddi"></div>
+        <div class="bootstrap_buttons">
 
-        <div class="container" id="aboba">
-            <table class="table">
+            <button type="button" class="reset btn btn-danger" data-column="0" data-filter="">Очистить фильтры
+            </button>
+            <br>
+        </div>
+
+        <div class="booba" id="aboba">
+            <table class="table table-bordered">
                 <thead class="thead-dark">
                 <tr>
-                    <th class="text-center" scope="col">#</th>
-                    <th class="text-center" scope="col">Юзернейм</th>
-                    <th class="text-center" scope="col">Номер  лаборатории</th>
-                    <th class="text-center" scope="col">Время пары</th>
+                    <th class="text-center" scope="col">№</th>
+                    <th class="text-center" scope="col">ФИО</th>
+                    <th class="text-center" scope="col">Номер лаборатории</th>
+                    <th class="text-center" scope="col">Дата</th>
+                    <th class="text-center" scope="col">Время</th>
+                    <th class="text-center" scope="col">Оборудование в лаборатории</th>
+                    <th class="text-center" scope="col">ПО в лаборатории</th>
+                    <th class="text-center" scope="col">День посутпления заявки</th>
+                    <th class="text-center" scope="col">Пожелания к заявке</th>
+                    <th class="text-center" scope="col">Обработать заявку</th>
+
+                </tr>
+                </thead>
+
+                <tfoot>
+                <tr>
+                    <th class="text-center" scope="col">№</th>
+                    <th class="text-center" scope="col">ФИО</th>
+                    <th class="text-center" scope="col">Номер лаборатории</th>
+                    <th class="text-center" scope="col">Дата</th>
+                    <th class="text-center" scope="col">Время</th>
+                    <th class="text-center" scope="col">Оборудование в лаборатории</th>
+                    <th class="text-center" scope="col">ПО в лаборатории</th>
                     <th class="text-center" scope="col">День посутпления заявки</th>
                     <th class="text-center" scope="col">Пожелания к заявке</th>
                     <th class="text-center" scope="col">Обработать заявку</th>
                 </tr>
-                </thead>
+                <tr>
+                    <th colspan="11" class="ts-pager">
+                        <div class="form-inline">
+                            <div class="btn-group btn-group-sm mx-1" role="group">
+                                <button type="button" class="btn btn-secondary first" title="В начало">⇤
+                                </button>
+                                <button type="button" class="btn btn-secondary prev" title="Прошлая страница">←
+                                </button>
+                            </div>
+                            <span class="pagedisplay"></span>
+                            <div class="btn-group btn-group-sm mx-1" role="group">
+                                <button type="button" class="btn btn-secondary next" title="Следующая страница">
+                                    →
+                                </button>
+                                <button type="button" class="btn btn-secondary last" title="В конец">⇥</button>
+                            </div>
+                            <select class="form-control-sm custom-select px-1 pagesize" title="Кол-во записей">
+                                <option selected="selected" value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="all">Все</option>
+                            </select>
+                            <select class="form-control-sm custom-select px-4 mx-1 pagenum"
+                                    title="Номер страницы"></select>
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+                <tbody>
                 {% for i in Zayavka %}
-                    <tbody>
+
                     <tr>
                         <th class="text-center" scope="row">{{ forloop.counter }}</th>
                         <td class="text-center">{{ i.zayavka_user_id.last_name }} {{ i.zayavka_user_id.first_name }}</td>
                         <td class="text-center">{{ i.zayavka_cab.number }}</td>
+                        <td class="text-center">{{ i.reserv_date }}</td>
                         <td class="text-center">{{ i.reserv_time }}</td>
+                        <td class="text-center">{% for j in i.zayavka_cab.oborud_id.all %} {{ j }}, {% endfor %}</td>
+                        <td class="text-center">{% for j in i.zayavka_cab.equip_id.all %} {{ j }}, {% endfor %}</td>
                         <td class="text-center">{{ i.date_zayavka }}</td>
                         <td class="text-center">{{ i.wish }}</td>
                         {#                    <td><a href="{% url 'update_zayvka_from_inf' i.pk %} " class="btn btn-primary">Обработать заявку</a></td>#}
                         <td class="text-center">
                             <button name="btn_{{ i.pk }}" type="submit" class="btn btn-success">Одобрить</button>
+                            <hr>
 
-                            <a id="obrabotka_modal" data-form-url="{% url 'update_zayvka_from_inf' i.pk %}"
-                               type="button"
-                               name="obrbotka" class="btn btn-danger">Отклонить заявку</a>
+                            <button id="obrabotka_modal" data-form-url="{% url 'update_zayvka_from_inf' i.pk %}"
+                                    type="button"
+                                    name="obrbotka" class="update-zayavka btn btn-danger">Отклонить
+                            </button>
                         </td>
+
                     </tr>
 
-                    </tbody>
                 {% endfor %}
+                </tbody>
+
             </table>
         </div>
     </form>
 
-
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript">
-        $(function () {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/extras/jquery.tablesorter.pager.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9"></script>
 
-            $("#obrabotka_modal").each(function () {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".update-zayavka").each(function () {
                 $(this).modalForm({formURL: $(this).data("form-url")});
             });
 
+
+            $("table").tablesorter({
+                theme: "bootstrap",
+                widthFixed: true,
+                widgets: ["filter",],
+
+                widgetOptions: {
+
+                    columns: ["primary", "secondary", "tertiary"],
+                    filter_reset: ".reset",
+                    filter_cssFilter: [
+                        'form-control',
+                        'form-control',
+                        'form-control', // select needs custom class names :(
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                        'form-control',
+                    ]
+                }
+            })
+                .tablesorterPager({
+                    container: $(".ts-pager"),
+                    cssGoto: ".pagenum",
+                    removeRows: false,
+                    output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+                });
+
         });
+
     </script>
 
 {% endblock %}

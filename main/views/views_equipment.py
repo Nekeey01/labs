@@ -15,7 +15,6 @@ from .imports import *
 class CreateEquipment(BSModalCreateView):
     template_name = 'main/admin/Equipment/create_equipment.html'
     form_class = UpdateEquipmentForm
-    success_message = 'Success: Book was created.'
     success_url = reverse_lazy('list_equipment')
 
 
@@ -59,7 +58,6 @@ class UpdateEquipment(DataMixin, BSModalUpdateView):
     model = Equipment
     form_class = UpdateEquipmentForm
     template_name = 'main/admin/Equipment/update_equipment.html'
-    success_message = 'DDDDDDDDDDD.'
     success_url = reverse_lazy('list_equipment')
 
     def get_context_data(self, *, object_list=None, **kwargs):

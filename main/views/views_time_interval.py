@@ -46,7 +46,6 @@ class UpdateTime(DataMixin, BSModalUpdateView):
     model = TimeInterval
     form_class = UpdateIntervalForm
     template_name = 'main/admin/Time_interval/update_time.html'
-    success_message = 'DDDDDDDDDDD.'
     success_url = reverse_lazy('list_times')
 
     def get_context_data(self, *, object_list=None, **kwargs):

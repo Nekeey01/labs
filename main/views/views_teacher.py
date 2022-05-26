@@ -142,3 +142,27 @@ class UpdateTeacher(DataMixin, BSModalUpdateView):
         if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
             form.save()
         return super().form_valid(form)
+
+
+## список арезервированных лабораторий
+class ListResCab(DataMixin, ListView):
+    model = CustomUser
+    template_name = "main/Teacher/reserved_pc.html"
+    context_object_name = "Res_lab"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_content(title="Зарезервированные лаборатории")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Reserved_Cabinet.objects.filter(Q(user_id=self.request.user)).order_by("-id")
+
+
+    def get(self, request, *args, **kwargs):
+        for key in request.GET.keys():
+            if key.startswith('btn_'):
+                btn_pk = key[4:]
+                record = Reserved_Cabinet.objects.get(id=btn_pk)
+                record.delete()
+        return super(ListResCab, self).get(request, *args, **kwargs)
