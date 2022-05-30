@@ -35,11 +35,7 @@
                                 <a class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                                    type="button" role="tab" aria-controls="home" aria-selected="true">Мои данные</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                   type="button" role="tab" aria-controls="profile" aria-selected="false">Мои
-                                    резервации</a>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="col-md-12">
@@ -95,85 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <div class="col-md-6">
-                                    <div class="profile-head">
-                                        <ul class="nav nav-tabs" id="myTab2" role="tablist">
-                                            {% for i in reserv_cab %}
-                                                <li class="nav-item">
-                                                    <a class="nav-link"
-                                                       id="{{ i.pk }}-tab"
-                                                       data-bs-toggle="tab"
-                                                       data-bs-target="#dbt{{ i.pk }}"
-                                                       type="button" role="tab" aria-controls="{{ i.pk }}"
-                                                       aria-selected="true">Кабинет - {{ i.reserv_date }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="tab-content">
-                                        {% for i in reserv_cab %}
-                                            <div class="tab-pane" id="dbt{{ i.pk }}"
-                                                 role="tabpanel"
-                                                 aria-labelledby="{{ i.pk }}-tab">
 
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Дата резервации</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p>{{ i.reserv_date }}</p>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Время резервации</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p>{{ i.reserv_time }}</p>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Номер кабинета</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p>{{ i.cab }}</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>ПО:</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        {% for g in i.cab.equip_id.all %}
-                                                            <p>{{ g }}</p>
-                                                        {% endfor %}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Удалить бронь</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <button type="submit" name="btn_{{ i.pk }}"
-                                                                class="btn btn-dark float-right">Delete
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

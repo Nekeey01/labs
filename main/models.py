@@ -102,9 +102,6 @@ class Reserved_Cabinet(models.Model):
 
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_id')
 
-    # zayavka = models.ForeignKey(Zayavka, on_delete=models.PROTECT)
-
-
     class Meta:
         verbose_name = 'Зарезервированные кабинеты'
         verbose_name_plural = "Зарезервированные кабинеты"

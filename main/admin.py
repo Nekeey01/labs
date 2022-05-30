@@ -9,6 +9,7 @@ admin.site.register(Reserved_Cabinet)
 admin.site.register(Cabinet)
 admin.site.register(TimeInterval)
 admin.site.register(Equipment)
+admin.site.register(Oborud)
 admin.site.register(Zayavka)
 
 
