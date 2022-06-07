@@ -41,6 +41,10 @@
             visibility: hidden;
             font-size: 0;
         }
+
+        .dt-buttons {
+            margin: 0 0 1% 92.2%;
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -142,7 +146,8 @@
                         <td>
 
                             <button id="del_z" name="btn_{{ i.pk }}" data-form-url="{{ i.pk }}" type="button"
-                                    class="bb btn btn-danger">Отменить заявку</button>
+                                    class="bb btn btn-danger">Отменить заявку
+                            </button>
                             <button id="del_zz{{ i.pk }}" name="btn_{{ i.pk }}" type="submit" class="hid_btn"></button>
                         </td>
 
@@ -168,7 +173,7 @@
                 </div>
 
                 <div class="booba" id="aboba">
-                    <table class="table table-bordered">
+                    <table id="AbobaTable" class="table table-bordered">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">№</th>
@@ -250,10 +255,76 @@
                 </div>
             </form>
         </div>
+        {#        <button onclick="exportData()">#}
+        {#            Скачать#}
+        {#        </button>#}
+        {#        <script>#}
+        {#            function exportData() {#}
+        {#                /* Get the HTML data using Element by Id */#}
+        {#                var table = document.getElementById("AbobaTable");#}
+        {##}
+        {#                /* Declaring array variable */#}
+        {#                var rows = [];#}
+        {##}
+        {#                //iterate through rows of table#}
+        {#                for (var i = 0, row; row = table.rows[i]; i++) {#}
+        {#                    //rows would be accessed using the "row" variable assigned in the for loop#}
+        {#                    //Get each cell value/column from the row#}
+        {#                    column1 = row.cells[0].innerText;#}
+        {#                    column2 = row.cells[1].innerText;#}
+        {#                    column3 = row.cells[2].innerText;#}
+        {#                    column4 = row.cells[3].innerText;#}
+        {#                    column5 = row.cells[4].innerText;#}
+        {#                    column6 = row.cells[5].innerText;#}
+        {#                    column7 = row.cells[6].innerText;#}
+        {##}
+        {#                    /* add a new records in the array */#}
+        {#                    rows.push(#}
+        {#                        [#}
+        {#                            column1,#}
+        {#                            column2,#}
+        {#                            column3,#}
+        {#                            column4,#}
+        {#                            column5,#}
+        {#                            column6,#}
+        {#                            column7#}
+        {#                        ]#}
+        {#                    );#}
+        {##}
+        {#                }#}
+        {#                csvContent = "data:text/csv;charset=utf-8,";#}
+        {#                /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */#}
+        {#                rows.forEach(function (rowArray) {#}
+        {#                    row = rowArray.join(",");#}
+        {#                    csvContent += row + "\r\n";#}
+        {#                });#}
+        {##}
+        {#                /* create a hidden <a> DOM node and set its download attribute */#}
+        {#                var encodedUri = encodeURI(csvContent);#}
+        {#                var link = document.createElement("a");#}
+        {#                link.setAttribute("href", encodedUri);#}
+        {#                link.setAttribute("download", "Stock_Price_Report.csv");#}
+        {#                document.body.appendChild(link);#}
+        {#                /* download the data file named "Stock_Price_Report.csv" */#}
+        {#                link.click();#}
+        {#            }#}
+        {#        </script>#}
+
+
     </div>
 {% endblock %}
 
 {% block scripts %}
+
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/extras/jquery.tablesorter.pager.min.js"></script>
@@ -262,6 +333,22 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            var booba = $('#AbobaTable').DataTable({
+                dom: 'Bfrtip',
+                searching: false,
+                paging: false,
+                info: false,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Экспорт в excel',
+                        className: 'btn btn-warning'
+                    },
+                ]
+            });
+            booba.buttons().container()
+                .appendTo($('.col-sm-6', booba.table().container()));
+
             $("table").tablesorter({
                 theme: "bootstrap",
                 widthFixed: true,

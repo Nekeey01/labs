@@ -1,6 +1,6 @@
 from .imports import *
 
-## Создание пользователя
+## Создание оборудования
 class CreateOborud(BSModalCreateView):
     form_class = UpdateOborudForm
     template_name = 'main/admin/Oborud/create_oborud.html'

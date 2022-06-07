@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{Chart.js, jquery.tablesorter}" />
+    <file url="file://$PROJECT_DIR$" libraries="{Chart.js, buttons.html5, dataTables.bootstrap5, dataTables.buttons, jquery.dataTables, jquery.tablesorter, jszip, pdfmake}" />
   </component>
 </project>

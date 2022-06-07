@@ -1,6 +1,6 @@
 from .imports import *
 
-## Создание интервалов времени
+## Создание лабораторий
 class CreateCab(BSModalCreateView):
     form_class = UpdateCabForm
     template_name = 'main/admin/Cabinet/create_cab.html'
@@ -28,7 +28,7 @@ class ListCabs(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Время")
+        c_def = self.get_user_content(title="Список лабораторий")
         return dict(list(context.items()) + list(c_def.items()))
 
     def get(self, request, *args, **kwargs):
