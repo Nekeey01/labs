@@ -110,7 +110,7 @@ class ListTeacher(DataMixin, ListView):
     model = CustomUser
     template_name = "main/admin/Teacher/list_teacher.html"
     context_object_name = "Teacher"
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all().order_by("id")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

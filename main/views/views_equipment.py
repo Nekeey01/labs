@@ -36,7 +36,7 @@ class ListEquipment(DataMixin, ListView):
     model = Equipment
     template_name = "main/admin/Equipment/list_equipment.html"
     context_object_name = "Equip"
-    queryset = Equipment.objects.all()
+    queryset = Equipment.objects.all().order_by("title")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

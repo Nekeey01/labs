@@ -188,7 +188,6 @@ class UpdateIntervalForm(ClassStyleForm):
 
 class UpdateCabForm(ClassStyleForm):
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
         super(UpdateCabForm, self).__init__(*args, **kwargs)
         self.fields['oborud_id'].label = 'Выберите оборудование'
         self.fields['time_id'].label = "Выберите интервалы времени"

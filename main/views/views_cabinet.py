@@ -9,7 +9,7 @@ class CreateCab(BSModalCreateView):
 def cab(request):
     data = dict()
     if request.method == 'GET':
-        books = Cabinet.objects.all()
+        books = Cabinet.objects.all().order_by("number")
         # asyncSettings.dataKey = 'table'
         data['tables'] = render_to_string(
             'main/admin/Cabinet/_cab_table.html',
@@ -24,7 +24,7 @@ class ListCabs(DataMixin, ListView):
     model = Cabinet
     template_name = "main/admin/Cabinet/list_cab.html"
     context_object_name = "Cab"
-    queryset = Cabinet.objects.all()
+    queryset = Cabinet.objects.all().order_by("number")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,9 +57,6 @@ class UpdateCabs(DataMixin, BSModalUpdateView):
         if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
             form.save()
         return super().form_valid(form)
-
-
-
 
 
 class ListCabinet(DataMixin, ListView):
