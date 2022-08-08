@@ -19,7 +19,7 @@ def times(request):
         return JsonResponse(data)
 
 
-## список_заявок
+## список интервалов времени
 class ListTime(DataMixin, ListView):
     model = TimeInterval
     template_name = "main/admin/Time_interval/list_times.html"
@@ -41,7 +41,7 @@ class ListTime(DataMixin, ListView):
         return super(ListTime, self).get(request, *args, **kwargs)
 
 
-## Создание кабинета
+## Обновление интервала времени
 class UpdateTime(DataMixin, BSModalUpdateView):
     model = TimeInterval
     form_class = UpdateIntervalForm

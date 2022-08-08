@@ -1,6 +1,6 @@
 from .imports import *
 
-## Создание интервалов времени
+## Создание лабораторий
 class CreateCab(BSModalCreateView):
     form_class = UpdateCabForm
     template_name = 'main/admin/Cabinet/create_cab.html'
@@ -9,7 +9,7 @@ class CreateCab(BSModalCreateView):
 def cab(request):
     data = dict()
     if request.method == 'GET':
-        books = Cabinet.objects.all()
+        books = Cabinet.objects.all().order_by("number")
         # asyncSettings.dataKey = 'table'
         data['tables'] = render_to_string(
             'main/admin/Cabinet/_cab_table.html',
@@ -19,16 +19,16 @@ def cab(request):
         return JsonResponse(data)
 
 
-## список_заявок
+## Список кабинетов
 class ListCabs(DataMixin, ListView):
     model = Cabinet
     template_name = "main/admin/Cabinet/list_cab.html"
     context_object_name = "Cab"
-    queryset = Cabinet.objects.all()
+    queryset = Cabinet.objects.all().order_by("number")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_content(title="Время")
+        c_def = self.get_user_content(title="Список лабораторий")
         return dict(list(context.items()) + list(c_def.items()))
 
     def get(self, request, *args, **kwargs):
@@ -59,9 +59,7 @@ class UpdateCabs(DataMixin, BSModalUpdateView):
         return super().form_valid(form)
 
 
-
-
-
+## Список кабинетов для пользователя
 class ListCabinet(DataMixin, ListView):
     model = Cabinet
     template_name = "main/show_pc.html"
@@ -74,6 +72,7 @@ class ListCabinet(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
+## AJAX компонент
 class SomeAPI(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'main/list_pc.html'
@@ -144,7 +143,6 @@ class SomeAPI(APIView):
                 print("O", o)
                 # request.session['reserv_times'] = d_s  ## устанавливаем дату в сессию
                 # request.session['reserv_time_inteval'] = time_start  ## устанавливаем время в сессию
-                free_pc_and_o = o
                 g = o
 
             print("G - ", g)
@@ -235,10 +233,6 @@ class Reserv_Cab(DataMixin, CreateView):
                 continue
 
             po = ""
-
-            # TOD: Изменить
-            # res_cab = Reserved_Cabinet(reserv_date=form.cleaned_data['reserv_date'], reserv_time=g, cab=self.gg, user_id=self.user_id)
-            # res_cab.save()
             res_cab = Zayavka(date_zayavka=datetime.now().strftime('%Y-%m-%d'),
                               reserv_date=form.cleaned_data['reserv_date'], reserv_time=g, zayavka_cab=self.gg,
                               zayavka_user_id=self.user_id, status="В ожидании", wish=form.cleaned_data['wish'])
@@ -251,6 +245,4 @@ class Reserv_Cab(DataMixin, CreateView):
                                  to=[self.user_id.email])
             # email.send()
 
-        # return super(Reserv_Cab, self).form_valid(form)
         return HttpResponseRedirect(self.success_url)
-        # return reverse_lazy("home")
