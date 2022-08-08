@@ -74,20 +74,14 @@ class Profile(DataMixin, UpdateView):
                     record.delete()
                     print("record.delete()")
 
-                    # form = self.get_form(self.form_class)
-                    # if form.is_valid():
-                    #     return self.form_valid(form)
-                    # else:
-                    # return reverse_lazy('profile', args=[self.kwargs['pk']])
                     return super(Profile, self).post(self, request, *args, **kwargs)
-
-                    # return HttpResponse("ашибка!!!")
 
             form = self.get_form(self.form_class)
             if form.is_valid():
                 return super(Profile, self).post(self, request, *args, **kwargs)
             else:
                 return HttpResponse("ашибка!!!")
+
 
 # Список заявок пользователя
 class ListUsersZayavka(DataMixin, ListView):

@@ -1,7 +1,7 @@
 from .imports import *
 
 
-# писок заявок
+# Список заявок
 class ShowZayvkaFromUcheb(DataMixin, ListView):
     model = Zayavka
     template_name = "main/ucheb/list_zayvka_from_ucheb.html"

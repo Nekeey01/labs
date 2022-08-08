@@ -20,7 +20,7 @@ def oborud(request):
         return JsonResponse(data)
 
 
-## список_заявок
+## Список оборудования
 class ListOborud(DataMixin, ListView):
     model = Oborud
     template_name = "main/admin/Oborud/list_oborud.html"
@@ -41,7 +41,7 @@ class ListOborud(DataMixin, ListView):
         return super(ListOborud, self).get(request, *args, **kwargs)
 
 
-## Создание кабинета
+## Обновление оборудования
 class UpdateOborud(DataMixin, BSModalUpdateView):
     model = Oborud
     form_class = UpdateOborudForm

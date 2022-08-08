@@ -39,7 +39,7 @@ class Equipment(models.Model):
         return f"{self.title}"
 
 
-## таблица ПО
+## таблица Оборудования
 class Oborud(models.Model):
     title = models.CharField('Название оборудования', max_length=50, unique=True)
 
@@ -69,7 +69,7 @@ class Cabinet(models.Model):
         return reverse('reservation', kwargs={'cab_id': self.number})
 
 
-## таблица оборудования
+## таблица заявки
 class Zayavka(models.Model):
     date_zayavka = models.DateField('День подачи заявки')
 
@@ -93,6 +93,7 @@ class Zayavka(models.Model):
         return f"{self.pk}"
 
 
+## Зарезервированные кабинеты
 class Reserved_Cabinet(models.Model):
     reserv_date = models.DateField('День')
     reserv_time = models.CharField('Время', max_length=50, null=True, blank=True)

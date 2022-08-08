@@ -56,7 +56,7 @@ def handle_uploaded_file(f):
             my_group.user_set.add(user)
 
         except:
-            print("АШИБКА В СТРОКЕ ", schet)
+            print("ОШИБКА В СТРОКЕ ", schet)
 
 
 ## Создание пользователя
@@ -144,7 +144,7 @@ class UpdateTeacher(DataMixin, BSModalUpdateView):
         return super().form_valid(form)
 
 
-## список арезервированных лабораторий
+## список зарезервированных лабораторий
 class ListResCab(DataMixin, ListView):
     model = CustomUser
     template_name = "main/Teacher/reserved_pc.html"
@@ -157,7 +157,6 @@ class ListResCab(DataMixin, ListView):
 
     def get_queryset(self):
         return Reserved_Cabinet.objects.filter(Q(user_id=self.request.user)).order_by("-id")
-
 
     def get(self, request, *args, **kwargs):
         for key in request.GET.keys():

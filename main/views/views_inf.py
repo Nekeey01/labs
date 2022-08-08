@@ -1,6 +1,7 @@
 from .imports import *
 
 
+## Список заявок инф. отдела
 class ShowZayvkaFromInf(DataMixin, ListView):
     model = Zayavka
     template_name = "main/inf/list_zayvka_from_inf.html"
@@ -25,7 +26,7 @@ class ShowZayvkaFromInf(DataMixin, ListView):
         return super(ShowZayvkaFromInf, self).get(request, *args, **kwargs)
 
 
-## Создание кабинета
+## Обновление статуса заявки
 class UpdateZayvkaFromInf(DataMixin, BSModalUpdateView):
     model = Zayavka
     form_class = UpdateZayvkaForm

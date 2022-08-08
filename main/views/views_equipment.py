@@ -1,17 +1,7 @@
 from .imports import *
 
 
-# ## Создание ПО
-# class CreateEquipment(DataMixin, CreateView):
-#     form_class = CreateEquipmentForm
-#     template_name = 'main/admin/Equipment/create_equipment.html'
-#     success_url = reverse_lazy('create_equipment')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_content(title="Добавить ПО")
-#         return dict(list(context.items()) + list(c_def.items()))
-
+## Создание ПО
 class CreateEquipment(BSModalCreateView):
     template_name = 'main/admin/Equipment/create_equipment.html'
     form_class = UpdateEquipmentForm
@@ -31,7 +21,7 @@ def equips(request):
         return JsonResponse(data)
 
 
-## список_заявок
+## список ПО
 class ListEquipment(DataMixin, ListView):
     model = Equipment
     template_name = "main/admin/Equipment/list_equipment.html"
@@ -65,9 +55,6 @@ class UpdateEquipment(DataMixin, BSModalUpdateView):
         c_def = self.get_user_content(title="Укажите причину отклонения заявки")
         return dict(list(context.items()) + list(c_def.items()))
 
-    # def form_valid(self, form):
-    #     if not self.request.is_ajax() or self.request.POST.get('asyncUpdate') == 'True':
-    #         form.save()
-    #     return super().form_valid(form)
+
 
 

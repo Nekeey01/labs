@@ -2,8 +2,6 @@ from .imports import *
 
 
 ## вьюха главной странички
-
-
 class Index(DataMixin, ListView):
     model = Cabinet
     template_name = "main/index.html"
@@ -15,7 +13,7 @@ class Index(DataMixin, ListView):
                                       res_lab=Reserved_Cabinet.objects.count())
         return dict(list(context.items()) + list(c_def.items()))
 
-    ## получает список тасков, начиная с последнего созданного
+    ## получает список ПО, начиная с последнего созданного
     def get_queryset(self):
         return Equipment.objects.order_by('-id')
 

@@ -19,7 +19,7 @@ def cab(request):
         return JsonResponse(data)
 
 
-## список_заявок
+## Список кабинетов
 class ListCabs(DataMixin, ListView):
     model = Cabinet
     template_name = "main/admin/Cabinet/list_cab.html"
@@ -59,6 +59,7 @@ class UpdateCabs(DataMixin, BSModalUpdateView):
         return super().form_valid(form)
 
 
+## Список кабинетов для пользователя
 class ListCabinet(DataMixin, ListView):
     model = Cabinet
     template_name = "main/show_pc.html"
@@ -71,6 +72,7 @@ class ListCabinet(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
+## AJAX компонент
 class SomeAPI(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'main/list_pc.html'
@@ -141,7 +143,6 @@ class SomeAPI(APIView):
                 print("O", o)
                 # request.session['reserv_times'] = d_s  ## устанавливаем дату в сессию
                 # request.session['reserv_time_inteval'] = time_start  ## устанавливаем время в сессию
-                free_pc_and_o = o
                 g = o
 
             print("G - ", g)
@@ -232,10 +233,6 @@ class Reserv_Cab(DataMixin, CreateView):
                 continue
 
             po = ""
-
-            # TOD: Изменить
-            # res_cab = Reserved_Cabinet(reserv_date=form.cleaned_data['reserv_date'], reserv_time=g, cab=self.gg, user_id=self.user_id)
-            # res_cab.save()
             res_cab = Zayavka(date_zayavka=datetime.now().strftime('%Y-%m-%d'),
                               reserv_date=form.cleaned_data['reserv_date'], reserv_time=g, zayavka_cab=self.gg,
                               zayavka_user_id=self.user_id, status="В ожидании", wish=form.cleaned_data['wish'])
@@ -248,6 +245,4 @@ class Reserv_Cab(DataMixin, CreateView):
                                  to=[self.user_id.email])
             # email.send()
 
-        # return super(Reserv_Cab, self).form_valid(form)
         return HttpResponseRedirect(self.success_url)
-        # return reverse_lazy("home")
